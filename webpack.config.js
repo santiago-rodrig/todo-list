@@ -54,27 +54,19 @@ module.exports = {
       },
       {
         test: /\.txt$/,
-        use: [
-          'raw-loader',
-        ],
+        use: ['raw-loader'],
       },
       {
         test: /\.html$/,
-        use: [
-          'html-loader',
-        ],
+        use: ['html-loader'],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: [
-          'file-loader',
-        ],
+        use: ['file-loader'],
       },
       {
         test: /\.(jpg|svg|png|gif)$/,
-        use: [
-          'file-loader',
-        ],
+        use: ['file-loader'],
       },
       {
         test: /\.scss$/,
@@ -98,10 +90,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ],
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },

@@ -1,11 +1,12 @@
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const hello_component = () => {
-  const container = document.createElement('div')
+const HelloComponent = () => {
+  const container = document.createElement('div');
   container.textContent = 'Hello world!';
 
   return container;
-}
+};
 
-document.body.append(hello_component());
+document.body.append(HelloComponent());

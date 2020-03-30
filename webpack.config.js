@@ -8,20 +8,21 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    app: './src/js/index.js',
+    app: path.resolve(__dirname, 'src/js/index.js'),
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Restaurant Logo',
+      title: 'TODO list',
       meta: {
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
       },
     }),
     new FaviconsWebpackPlugin({
-      logo: './src/images/favicon.png',
+      logo: path.resolve(__dirname, 'src/images/favicon.png'),
       mode: 'webapp',
       devMode: 'webapp',
+      inject: true,
       favicons: {
         appName: 'todo-list',
         appDescription: 'A TODO list app',

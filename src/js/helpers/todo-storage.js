@@ -28,7 +28,7 @@ export default class TodoStorage {
     }
   }
 
-  updateStorage(source={}) {
+  updateStorage(source = {}) {
     const item = JSON.stringify(Object.assign(this.projects, source));
 
     localStorage.setItem(this.storageEntry, item);

@@ -1,5 +1,6 @@
 import { DOMHelper, TodoStorage } from '../helpers';
 import Task from './task';
+import Sidebar from './sidebar';
 
 const storage = new TodoStorage();
 

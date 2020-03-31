@@ -6,10 +6,8 @@ import Header from './header';
 import Footer from './footer';
 import Main from './main';
 
+const header = new Header();
 const footer = new Footer();
 const main = new Main();
 
-document.body.append(
-  main.render(),
-  footer.render()
-);
+document.body.append(header.render(), main.render(), footer.render());

@@ -7,7 +7,11 @@ export default class Link {
 
   render() {
     const link = DOMHelper.createElement('li', ['nav-item']);
-    const anchor = DOMHelper.createElement('a', ['nav-link'], [{ prop: 'href', value: '#' }]);
+    const anchor = DOMHelper.createElement(
+			"a",
+			["nav-link", 'text-white'],
+			[{ prop: "href", value: "#" }]
+		);
 
     anchor.innerText = this.linkName;
     link.appendChild(anchor);

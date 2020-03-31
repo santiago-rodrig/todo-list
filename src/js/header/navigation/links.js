@@ -6,16 +6,13 @@ export default class Link {
   }
 
   render() {
-    const link = DOMHelper.createElement('li', ['nav-item']);
-    const anchor = DOMHelper.createElement(
-			"a",
-			["nav-link", 'text-white'],
-			[{ prop: "href", value: "#" }]
-		);
+    const link = DOMHelper.createElement(
+      'a',
+      ['dropdown-item'],
+      [{ prop: 'href', value: '#' }],
+    );
 
-    anchor.innerText = this.linkName;
-    link.appendChild(anchor);
-
+    link.innerText = this.linkName;
     return link;
   }
 }

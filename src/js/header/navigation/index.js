@@ -8,6 +8,26 @@ export default class Navigation {
     ];
   }
 
+  renderDropdown() {
+    const container = DOMHelper.createElement('li', ['nav-item', 'dropleft']);
+    const anchor = DOMHelper.createElement(
+      'a',
+      ['nav-link', 'dropdown-toggle', 'text-white'],
+      [
+        { prop: 'data-toggle', value: 'dropdown' },
+        { prop: 'href', value: '#' },
+        { prop: 'role', value: 'button' },
+        { prop: 'aria-haspopup', value: 'true' },
+        { prop: 'aria-expanded', value: 'false' },
+      ],
+    );
+    const menuContainer = DOMHelper.createElement('li', ['dropdown-menu']);
+    const icon = DOMHelper.createElement('i', ['fas', 'fa-cog']);
+    anchor.append(icon);
+    container.append(anchor, this.loopNavLinks(menuContainer));
+    return container;
+  }
+
   loopNavLinks(container) {
     let link;
 
@@ -21,6 +41,7 @@ export default class Navigation {
 
   render() {
     const container = DOMHelper.createElement('ul', ['nav', 'justify-content-end']);
-    return this.loopNavLinks(container);
+    container.appendChild(this.renderDropdown());
+    return container;
   }
 }

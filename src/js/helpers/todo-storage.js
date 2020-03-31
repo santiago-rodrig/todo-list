@@ -7,7 +7,7 @@ export default class TodoStorage {
     if (localStorage.getItem(this.storageEntry)) {
       const parsed = JSON.parse(localStorage.getItem(this.storageEntry));
 
-      this.projects = parsed.projects;
+      this.projects = parsed;
     } else {
       this.projects = {
         default: {
@@ -17,12 +17,14 @@ export default class TodoStorage {
         }
       };
 
-      this.alterStorage();
+      this.updateStorage();
     }
   }
 
-  alterStorage() {
-    localStorage.setItem(this.storageEntry, JSON.stringify(this.projects));
+  updateStorage(source={}) {
+    const item = JSON.stringify(Object.assign(this.projects, source));
+
+    localStorage.setItem(this.storageEntry, item);
   }
 
   getActiveProject() {

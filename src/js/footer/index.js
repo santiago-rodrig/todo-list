@@ -18,11 +18,10 @@ export default class Footer {
   }
 
   link(prop) {
-    const a = DOMHelper.createElement('a');
+    const a = DOMHelper.createElement('a', [], [{ prop: 'href', value: '#' }]);
     const li = DOMHelper.createElement(
       'li',
-      ['list-group-item'],
-      [{ prop: 'href', value: '#'}]
+      ['list-group-item']
     );
 
     a.innerHTML = this.linkIcons[prop];

@@ -1,5 +1,5 @@
-import { DOMHelper } from '../../../../Helpers';
-import Links from './links';
+import { DOMHelper } from '../../helpers';
+import Link from './links';
 
 export default class Navigation {
   constructor() {
@@ -9,9 +9,13 @@ export default class Navigation {
   }
 
   loopNavLinks(container) {
+    let link;
+
     this.navList.forEach((navItem) => {
-      container.appendChild(new Links(navItem).render());
+      link = new Link(navItem);
+      container.appendChild(link.render());
     });
+
     return container;
   }
 

@@ -1,13 +1,10 @@
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './home/header';
+import '../scss/main.scss';
+import Header from './header';
+import Footer from './footer';
 
-const HelloComponent = () => {
-  const container = document.createElement('div');
-  container.appendChild(new Header().render());
+const footer = new Footer();
 
-  return container;
-};
-
-document.body.append(HelloComponent());
+document.body.appendChild(footer.render());

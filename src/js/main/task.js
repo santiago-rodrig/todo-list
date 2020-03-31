@@ -62,7 +62,10 @@ export default class Task {
   }
 
   render() {
-    const box = DOMHelper.createElement('div', ['col-12', 'col-md-4']);
+    const box = DOMHelper.createElement(
+      'div', ['col-12', 'col-md-6', 'my-4']
+    );
+
     const task = DOMHelper.createElement('div', ['card']);
 
     switch (this.priority) {

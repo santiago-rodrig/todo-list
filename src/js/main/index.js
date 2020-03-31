@@ -16,7 +16,9 @@ export default class Main {
   tasks() {
     const tasks = storage.getActiveProject().tasks;
     const container = DOMHelper.createElement('div', ['col-12', 'col-md-8']);
-    const taskList = DOMHelper.createElement('div', ['row']);
+    const taskList = DOMHelper.createElement(
+      'div', ['row', 'justify-content-even']
+    );
 
     Object.values(tasks).forEach(task => {
       taskList.append((new Task(task)).render());

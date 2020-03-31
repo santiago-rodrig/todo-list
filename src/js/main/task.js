@@ -26,16 +26,37 @@ export default class Task {
   deleteHandler() {
     const task = document.getElementById(this.id);
 
-    task.parentNode.removeChild(task);
+    const fadeEffect = setInterval(function () {
+      if (!task.style.opacity) {
+        task.style.opacity = 1;
+      }
+
+      if (task.style.opacity > 0) {
+        task.style.opacity -= 0.05;
+      } else {
+        clearInterval(fadeEffect);
+        task.parentNode.removeChild(task);
+      }
+    }, 8);
 
     storage.deleteTask(this.id);
   }
 
   completeHandler() {
-    console.log(this);
     const task = document.getElementById(this.id);
 
-    task.parentNode.removeChild(task);
+    const fadeEffect = setInterval(function () {
+      if (!task.style.opacity) {
+        task.style.opacity = 1;
+      }
+
+      if (task.style.opacity > 0) {
+        task.style.opacity -= 0.05;
+      } else {
+        clearInterval(fadeEffect);
+        task.parentNode.removeChild(task);
+      }
+    }, 8);
 
     storage.completeTask(this.id);
   }
@@ -111,6 +132,7 @@ export default class Task {
     task.append(taskHeader, taskBody, taskFooter);
     box.append(task);
     box.id = this.id;
+    box.classList.add('toggle-content', 'is-visible');
 
     return box;
   }

@@ -8,31 +8,45 @@ export default class Task {
     this.priority = task.priority;
   }
 
-  render() {
-    const box = DOMHelper.createElement('div', ['col-12']);
-    const task = DOMHelper.createElement('div', ['card']);
-    const taskBody = DOMHelper.createElement('div', ['card-body']);
-
-    const taskFooter = DOMHelper.createElement(
-      'div', ['card-footer', 'text-muted']
-    );
-
-    const taskHeader = DOMHelper.createElement(
+  header() {
+    const header = DOMHelper.createElement(
       'div', ['card-header', 'text-muted']
     );
 
+    header.textContent = this.priority;
+
+    return header;
+  }
+
+  body() {
+    const body = DOMHelper.createElement('div', ['card-body']);
     const title = DOMHelper.createElement('h3', ['card-title']);
-    const description = DOMHelper.createElement('p', ['card-text']);
-    const dueDate = DOMHelper.createElement('span', ['task-due-date']);
-    const priority = DOMHelper.createElement('span', ['task-priority']);
+    const text = DOMHelper.createElement('p', ['card-text']);
 
     title.textContent = this.title;
-    description.textContent = this.description;
-    dueDate.textContent = this.dueDate;
-    priority.textContent = this.priority;
-    taskHeader.append(priority);
-    taskFooter.append(dueDate);
-    taskBody.append(title, description);
+    text.textContent = this.description;
+    body.append(title, text);
+
+    return body;
+  }
+
+  footer() {
+    const footer = DOMHelper.createElement(
+      'div', ['card-footer', 'text-muted']
+    );
+
+    footer.textContent = this.dueDate;
+
+    return footer;
+  }
+
+  render() {
+    const box = DOMHelper.createElement('div', ['col-12', 'col-md-4']);
+    const task = DOMHelper.createElement('div', ['card']);
+    const taskHeader = this.header();
+    const taskBody = this.body();
+    const taskFooter = this.footer();
+
     task.append(taskHeader, taskBody, taskFooter);
     box.append(task);
 

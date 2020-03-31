@@ -6,7 +6,7 @@ const storage = new TodoStorage();
 
 export default class Main {
   heading() {
-    const h1 = DOMHelper.createElement('h1', ['text-center']);
+    const h1 = DOMHelper.createElement('h1', ['text-center', 'my-5']);
 
     h1.textContent = storage.getActiveProject().title;
 
@@ -15,7 +15,7 @@ export default class Main {
 
   tasks() {
     const tasks = storage.getActiveProject().tasks;
-    const container = DOMHelper.createElement('div', ['container']);
+    const container = DOMHelper.createElement('div', ['col-12', 'col-md-8']);
     const taskList = DOMHelper.createElement('div', ['row']);
 
     Object.values(tasks).forEach(task => {
@@ -31,8 +31,13 @@ export default class Main {
     const main = DOMHelper.createElement('main');
     const heading = this.heading();
     const tasks = this.tasks();
+    const sideBar = (new Sidebar()).render();
+    const container = DOMHelper.createElement('div', ['container']);
+    const row = DOMHelper.createElement('div', ['row']);
 
-    main.append(heading, tasks);
+    container.append(row);
+    row.append(sideBar, tasks);
+    main.append(heading, container);
 
     return main;
   }

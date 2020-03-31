@@ -7,6 +7,7 @@ export default class Header {
       'container-fluid',
       'p-4',
       'bg-dark',
+      'mb-5',
     ]);
     const navigation = new Navigation();
 

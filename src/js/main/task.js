@@ -32,6 +32,7 @@ export default class Task {
   }
 
   completeHandler() {
+    console.log(this);
     const task = document.getElementById(this.id);
 
     task.parentNode.removeChild(task);
@@ -54,8 +55,8 @@ export default class Task {
 
     deleteAction.innerHTML = '<i class="fas fa-window-close"></i>';
     completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
-    deleteAction.addEventListener('click', this.deleteHandler);
-    completeAction.addEventListener('click', this.completeHandler);
+    deleteAction.addEventListener('click', this.deleteHandler.bind(this));
+    completeAction.addEventListener('click', this.completeHandler.bind(this));
     flexContainer.append(completeAction, deleteAction);
 
     return flexContainer;

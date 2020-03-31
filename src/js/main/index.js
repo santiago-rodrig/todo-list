@@ -21,7 +21,9 @@ export default class Main {
     );
 
     Object.values(tasks).forEach(task => {
-      taskList.append((new Task(task)).render());
+      if (!task.completed) {
+        taskList.append((new Task(task)).render());
+      }
     });
 
     container.append(taskList);

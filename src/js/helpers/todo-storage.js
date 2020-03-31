@@ -12,7 +12,14 @@ export default class TodoStorage {
       this.projects = {
         default: {
           title: 'Default',
-          tasks: {},
+          tasks: {
+            default: {
+              title: 'Create a task!',
+              description: 'You can create some tasks by clicking the + button',
+              dueDate: '2020/04/10',
+              priority: 'normal'
+            }
+          },
           active: true
         }
       };

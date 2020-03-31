@@ -1,4 +1,5 @@
 import { DOMHelper, TodoStorage } from '../helpers';
+import Sidebar from './sidebar';
 
 const storage = new TodoStorage();
 
@@ -14,8 +15,9 @@ export default class Main {
   render() {
     const main = DOMHelper.createElement('main');
     const h1 = this.heading();
+    const sidebar = new Sidebar();
 
-    main.append(h1);
+    main.append(h1, sidebar.render());
 
     return main;
   }

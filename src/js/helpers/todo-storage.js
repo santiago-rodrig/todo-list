@@ -13,15 +13,15 @@ export default class TodoStorage {
         default: {
           title: 'Default',
           tasks: {},
-          active: true
-        }
+          active: true,
+        },
       };
 
       this.updateStorage();
     }
   }
 
-  updateStorage(source={}) {
+  updateStorage(source = {}) {
     const item = JSON.stringify(Object.assign(this.projects, source));
 
     localStorage.setItem(this.storageEntry, item);

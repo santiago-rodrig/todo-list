@@ -1,4 +1,5 @@
 import SecretKey from './secret.key.txt';
+import moment from 'moment';
 
 export default class TodoStorage {
   constructor() {
@@ -13,11 +14,23 @@ export default class TodoStorage {
         default: {
           title: 'Default',
           tasks: {
-            default: {
+            createATask: {
               title: 'Create a task!',
-              description: 'You can create some tasks by clicking the + button',
-              dueDate: '2020/04/10',
+              description: 'You can create some tasks by clicking the + button.',
+              dueDate: moment().format('MMM Do YYYY, h:mm:ss a'),
               priority: 'normal'
+            },
+            taskHasColors: {
+              title: 'Tasks have colors!',
+              description: 'Tasks have different colors depending on the priority.',
+              dueDate: moment().format('MMM Do YYYY, h:mm:ss a'),
+              priority: 'important'
+            },
+            deleteATask: {
+              title: 'Delete a task if you want to',
+              description: 'Remove an unwanted task any time.',
+              dueDate: 'No due date',
+              priority: 'optional'
             }
           },
           active: true

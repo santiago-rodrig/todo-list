@@ -8,6 +8,7 @@
 body {
   min-height: 100vh;
   position: relative;
+  padding-bottom: 20rem;
 }
 
 h1, h2, h3 {
@@ -19,4 +20,13 @@ h1, h2, h3 {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.task-action {
+  opacity: 0.8;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
 }

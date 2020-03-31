@@ -1,6 +1,18 @@
+@font-face {
+  font-family: 'Spicy Rice';
+  src: url('../fonts/SpicyRice-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
 body {
   min-height: 100vh;
   position: relative;
+  padding-bottom: 20rem;
+}
+
+h1, h2, h3 {
+  font-family: 'Spicy Rice';
 }
 
 #main-footer {
@@ -8,4 +20,13 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.task-action {
+  opacity: 0.8;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
 }

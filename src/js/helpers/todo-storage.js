@@ -1,4 +1,5 @@
 import SecretKey from './secret.key.txt';
+import moment from 'moment';
 
 export default class TodoStorage {
   constructor() {
@@ -12,9 +13,34 @@ export default class TodoStorage {
       this.projects = {
         default: {
           title: 'Default',
-          tasks: {},
-          active: true,
-        },
+          tasks: {
+            createATask: {
+              title: 'Create a task!',
+              description: 'You can create some tasks by clicking the + button.',
+              dueDate: moment().format('MMM Do YYYY, h:mm:ss a'),
+              priority: 'normal',
+              id: 'create-a-task',
+              completed: false
+            },
+            taskHasColors: {
+              title: 'Tasks have colors!',
+              description: 'Tasks have different colors depending on the priority.',
+              dueDate: moment().format('MMM Do YYYY, h:mm:ss a'),
+              priority: 'important',
+              id: 'tasks-have-colors',
+              completed: false
+            },
+            deleteATask: {
+              title: 'Delete a task if you want to',
+              description: 'Remove an unwanted task any time.',
+              dueDate: 'No due date',
+              priority: 'optional',
+              id: 'delete-a-task-if-you-want-to',
+              complete: false
+            }
+          },
+          active: true
+        }
       };
 
       this.updateStorage();
@@ -25,6 +51,40 @@ export default class TodoStorage {
     const item = JSON.stringify(Object.assign(this.projects, source));
 
     localStorage.setItem(this.storageEntry, item);
+  }
+
+  getTaskKeyById(taskId) {
+    const tasks = this.getActiveProject().tasks;
+    const taskKeys = Object.keys(tasks);
+    let taskKey;
+
+    for (let i = 0; i < taskKeys.length; i += 1) {
+      if (tasks[taskKeys[i]].id === taskId) {
+        taskKey = taskKeys[i];
+
+        break;
+      }
+    }
+
+    return taskKey;
+  }
+
+  deleteTask(taskId) {
+    const tasks = this.getActiveProject().tasks;
+    const taskKey = this.getTaskKeyById(taskId);
+
+    delete tasks[taskKey];
+
+    this.updateStorage();
+  }
+
+  completeTask(taskId) {
+    const tasks = this.getActiveProject().tasks;
+    const taskKey = this.getTaskKeyById(taskId);
+
+    tasks[taskKey].completed = true;
+
+    this.updateStorage();
   }
 
   getActiveProject() {

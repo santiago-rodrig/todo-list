@@ -1,4 +1,4 @@
-import { DOMHelper } from '../../helpers';
+import { DOMHelper } from '../helpers';
 
 export default class Sidebar {
   renderProjectItem(projectName, active = false) {
@@ -31,7 +31,8 @@ export default class Sidebar {
 
   render() {
     const container = DOMHelper.createElement('div', [
-      'container',
+      'col-12',
+      'col-md-4',
       'border-right',
       'shadow',
     ]);

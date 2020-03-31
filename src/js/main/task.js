@@ -1,4 +1,6 @@
-import { DOMHelper } from '../helpers';
+import { DOMHelper, TodoStorage } from '../helpers';
+
+const storage = new TodoStorage();
 
 export default class Task {
   constructor(task) {
@@ -6,6 +8,9 @@ export default class Task {
     this.description = task.description;
     this.dueDate = task.dueDate;
     this.priority = task.priority;
+    this.id = this.title.trim().split(' ').map(
+      e => e.toLowerCase().trim().replace(/\W/gi, '')
+    ).join('-');
   }
 
   header() {
@@ -16,6 +21,22 @@ export default class Task {
     header.textContent = this.priority;
 
     return header;
+  }
+
+  deleteHandler() {
+    const task = document.getElementById(this.id);
+
+    task.parentNode.removeChild(task);
+
+    storage.deleteTask(this.id);
+  }
+
+  completeHandler() {
+    const task = document.getElementById(this.id);
+
+    task.parentNode.removeChild(task);
+
+    storage.completeTask(this.id);
   }
 
   actions() {
@@ -33,6 +54,8 @@ export default class Task {
 
     deleteAction.innerHTML = '<i class="fas fa-window-close"></i>';
     completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
+    deleteAction.addEventListener('click', this.deleteHandler);
+    completeAction.addEventListener('click', this.completeHandler);
     flexContainer.append(completeAction, deleteAction);
 
     return flexContainer;
@@ -86,6 +109,7 @@ export default class Task {
 
     task.append(taskHeader, taskBody, taskFooter);
     box.append(task);
+    box.id = this.id;
 
     return box;
   }

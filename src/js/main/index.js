@@ -2,10 +2,9 @@ import { DOMHelper, TodoStorage } from '../helpers';
 import Task from './task';
 import Sidebar from './sidebar';
 
-const storage = new TodoStorage();
-
 export default class Main {
   heading() {
+    const storage = new TodoStorage();
     const h1 = DOMHelper.createElement('h1', ['text-center', 'my-4']);
 
     h1.textContent = storage.getActiveProject().title;
@@ -14,6 +13,7 @@ export default class Main {
   }
 
   tasks() {
+    const storage = new TodoStorage();
     const tasks = storage.getActiveProject().tasks;
     const container = DOMHelper.createElement('div', ['col-12', 'col-md-8']);
     const heading = this.heading();
@@ -29,6 +29,7 @@ export default class Main {
     });
 
     container.append(heading, taskList);
+    container.id = 'tasks-container';
 
     return container;
   }

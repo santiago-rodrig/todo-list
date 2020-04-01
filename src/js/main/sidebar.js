@@ -1,9 +1,9 @@
 import { DOMHelper, TodoStorage } from '../helpers';
-
-const storage = new TodoStorage();
+import Main from './index';
 
 export default class Sidebar {
   changeProject() {
+    const storage = new TodoStorage();
     const currentProject = document.getElementById('current-project');
 
     if (this === currentProject) return;
@@ -12,6 +12,16 @@ export default class Sidebar {
     currentProject.classList.remove('active');
     this.id = 'current-project';
     this.classList.add('active');
+    storage.changeToProject(this.textContent);
+  }
+
+  changeTasks() {
+    const main = new Main();
+    const tasksContainer = document.getElementById('tasks-container');
+    const row = tasksContainer.parentNode;
+
+    row.removeChild(tasksContainer);
+    row.append(main.tasks());
   }
 
   projectItem(project) {
@@ -25,11 +35,13 @@ export default class Sidebar {
     }
 
     item.addEventListener('click', this.changeProject);
+    item.addEventListener('click', this.changeTasks);
 
     return item;
   }
 
   projectList() {
+    const storage = new TodoStorage();
     const list = DOMHelper.createElement('ul', ['list-group']);
     const projectKeys = Object.keys(storage.projects);
 
@@ -43,6 +55,7 @@ export default class Sidebar {
   }
 
   addProjectHandler() {
+    const storage = new TodoStorage();
     const projectName = prompt('Please provide the name of the project');
     const projectsList = document.getElementById('projects-list');
     const activeProject = document.getElementById('current-project');

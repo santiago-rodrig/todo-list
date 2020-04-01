@@ -47,10 +47,9 @@ export default class TodoStorage {
     }
   }
 
-  addProject(projectName) {
+  titleToCamelCase(projectName) {
     let camelCased = '';
     let words = [];
-    const projectTitle = projectName;
 
     projectName = projectName.trim().split(' ').map(e => {
       return e.replace(/\W/gi, '').trim().toLowerCase();
@@ -66,8 +65,23 @@ export default class TodoStorage {
 
     words = words.join('');
 
-    this.projects[words] = {
-      title: projectTitle,
+    return words;
+  }
+
+  changeToProject(projectName) {
+    const key = this.titleToCamelCase(projectName);
+
+    this.getActiveProject().active = false;
+    this.projects[key].active = true;
+
+    this.updateStorage();
+  }
+
+  addProject(projectName) {
+    const key = this.titleToCamelCase(projectName);
+
+    this.projects[key] = {
+      title: projectName,
       tasks: {},
       active: true
     }

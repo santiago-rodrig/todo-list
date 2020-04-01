@@ -1,7 +1,5 @@
 import { DOMHelper, TodoStorage } from '../helpers';
 
-const storage = new TodoStorage();
-
 export default class Task {
   constructor(task) {
     this.title = task.title;

@@ -47,8 +47,38 @@ export default class TodoStorage {
     }
   }
 
-  updateStorage(source = {}) {
-    const item = JSON.stringify(Object.assign(this.projects, source));
+  addProject(projectName) {
+    let camelCased = '';
+    let words = [];
+    const projectTitle = projectName;
+
+    projectName = projectName.trim().split(' ').map(e => {
+      return e.replace(/\W/gi, '').trim().toLowerCase();
+    });
+
+    words.push(projectName[0]);
+
+    for (let i = 1; i < projectName.length; i += 1) {
+      camelCased = projectName[i].split('').slice(1);
+      camelCased = projectName[i][0] + camelCased;
+      words.push(camelCased);
+    }
+
+    words = words.join('');
+
+    this.projects[words] = {
+      title: projectTitle,
+      tasks: {},
+      active: true
+    }
+
+    this.getActiveProject().active = false;
+
+    this.updateStorage();
+  }
+
+  updateStorage() {
+    const item = JSON.stringify(this.projects);
 
     localStorage.setItem(this.storageEntry, item);
   }

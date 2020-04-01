@@ -13,7 +13,7 @@ export default class Task {
 
   header() {
     const header = DOMHelper.createElement(
-      'div', ['card-header', 'bg-dark', 'text-light']
+      'div', ['card-header', 'bg-dark', 'text-light'],
     );
 
     header.textContent = this.priority;
@@ -24,7 +24,7 @@ export default class Task {
   deleteHandler() {
     const task = document.getElementById(this.id);
 
-    const fadeEffect = setInterval(function () {
+    const fadeEffect = setInterval(() => {
       if (!task.style.opacity) {
         task.style.opacity = 1;
       }
@@ -36,14 +36,14 @@ export default class Task {
         task.parentNode.removeChild(task);
       }
     }, 8);
-
+    const storage = new TodoStorage();
     storage.deleteTask(this.id);
   }
 
   completeHandler() {
     const task = document.getElementById(this.id);
 
-    const fadeEffect = setInterval(function () {
+    const fadeEffect = setInterval(() => {
       if (!task.style.opacity) {
         task.style.opacity = 1;
       }
@@ -55,21 +55,21 @@ export default class Task {
         task.parentNode.removeChild(task);
       }
     }, 8);
-
+    const storage = new TodoStorage();
     storage.completeTask(this.id);
   }
 
   actions() {
     const flexContainer = DOMHelper.createElement(
-      'div', ['d-flex', 'justify-content-end', 'bg-dark', 'p-2']
+      'div', ['d-flex', 'justify-content-end', 'bg-dark', 'p-2'],
     );
 
     const deleteAction = DOMHelper.createElement(
-      'div', ['text-danger', 'mx-2', 'task-action']
+      'div', ['text-danger', 'mx-2', 'task-action'],
     );
 
     const completeAction = DOMHelper.createElement(
-      'div', ['text-success', 'task-action']
+      'div', ['text-success', 'task-action'],
     );
 
     deleteAction.innerHTML = '<i class="fas fa-window-close"></i>';
@@ -96,7 +96,7 @@ export default class Task {
 
   footer() {
     const footer = DOMHelper.createElement(
-      'div', ['card-footer', 'bg-dark', 'text-light']
+      'div', ['card-footer', 'bg-dark', 'text-light'],
     );
 
     footer.textContent = this.dueDate;
@@ -106,7 +106,7 @@ export default class Task {
 
   render() {
     const box = DOMHelper.createElement(
-      'div', ['col-12', 'col-md-6', 'my-4']
+      'div', ['col-12', 'col-md-6', 'my-4'],
     );
 
     const task = DOMHelper.createElement('div', ['card']);
@@ -127,10 +127,10 @@ export default class Task {
     const taskBody = this.body();
     const taskFooter = this.footer();
 
-    task.append(taskHeader, taskBody, taskFooter);
+    task.append(taskHeader, taskBody);
+    if (this.dueDate) task.appendChild(taskFooter);
     box.append(task);
     box.id = this.id;
-    box.classList.add('toggle-content', 'is-visible');
 
     return box;
   }

@@ -105,8 +105,9 @@ export default class TodoStorage {
   }
 
   getTaskKeyById(taskId) {
-    const tasks = this.getActiveProject().tasks;
+    const { tasks } = this.getActiveProject();
     const taskKeys = Object.keys(tasks);
+    console.log(taskKeys);
     let taskKey;
 
     for (let i = 0; i < taskKeys.length; i += 1) {
@@ -121,7 +122,7 @@ export default class TodoStorage {
   }
 
   deleteTask(taskId) {
-    const { tasks } = this.getActiveProject().tasks;
+    const { tasks } = this.getActiveProject();
     const taskKey = this.getTaskKeyById(taskId);
 
     delete tasks[taskKey];
@@ -130,7 +131,7 @@ export default class TodoStorage {
   }
 
   completeTask(taskId) {
-    const { tasks } = this.getActiveProject().tasks;
+    const { tasks } = this.getActiveProject();
     const taskKey = this.getTaskKeyById(taskId);
 
     tasks[taskKey].completed = true;

@@ -80,6 +80,7 @@ export default class Sidebar {
   addProjectHandler() {
     const storage = new TodoStorage();
     const projectName = prompt('Please provide the name of the project');
+    if (!projectName) return;
     const projectsList = document.getElementById('projects-list');
     const activeProject = document.getElementById('current-project');
 
@@ -98,7 +99,7 @@ export default class Sidebar {
     const label = DOMHelper.createElement(
       'label',
       [],
-      [{ prop: 'for', value: 'task-title' }]
+      [{ prop: 'for', value: 'task-title' }],
     );
 
     const input = DOMHelper.createElement(
@@ -107,8 +108,8 @@ export default class Sidebar {
       [
         { prop: 'id', value: 'task-title' },
         { prop: 'name', value: 'task-title' },
-        { prop: 'type', value: 'text' }
-      ]
+        { prop: 'type', value: 'text' },
+      ],
     );
 
     label.textContent = 'Title';
@@ -123,7 +124,7 @@ export default class Sidebar {
     const label = DOMHelper.createElement(
       'label',
       [],
-      [{ prop: 'for', value: 'task-importance' }]
+      [{ prop: 'for', value: 'task-importance' }],
     );
 
     const input = DOMHelper.createElement(
@@ -131,8 +132,8 @@ export default class Sidebar {
       ['form-control'],
       [
         { prop: 'id', value: 'task-importance' },
-        { prop: 'name', value: 'task-importance' }
-      ]
+        { prop: 'name', value: 'task-importance' },
+      ],
     );
 
     const normal = document.createElement('option');
@@ -156,7 +157,7 @@ export default class Sidebar {
     const label = DOMHelper.createElement(
       'label',
       [],
-      [{ prop: 'for', value: 'task-due-date' }]
+      [{ prop: 'for', value: 'task-due-date' }],
     );
 
     const input = DOMHelper.createElement(
@@ -165,11 +166,36 @@ export default class Sidebar {
       [
         { prop: 'id', value: 'task-due-date' },
         { prop: 'name', value: 'task-due-date' },
-        { prop: 'type', value: 'datetime-local' }
-      ]
+        { prop: 'type', value: 'date' },
+      ],
     );
 
     label.textContent = 'Due date';
+    wrapper.append(label, input);
+
+    return wrapper;
+  }
+
+  taskDueTime() {
+    const wrapper = DOMHelper.createElement('div', ['form-group']);
+
+    const label = DOMHelper.createElement(
+      'label',
+      [],
+      [{ prop: 'for', value: 'task-due-time' }],
+    );
+
+    const input = DOMHelper.createElement(
+      'input',
+      ['form-control'],
+      [
+        { prop: 'id', value: 'task-due-time' },
+        { prop: 'name', value: 'task-due-time' },
+        { prop: 'type', value: 'time' },
+      ],
+    );
+
+    label.textContent = 'Due Time';
     wrapper.append(label, input);
 
     return wrapper;
@@ -179,7 +205,7 @@ export default class Sidebar {
     const submitButton = DOMHelper.createElement(
       'button',
       ['btn', 'btn-success'],
-      [{ prop: 'type', value: 'button' }]
+      [{ prop: 'type', value: 'button' }],
     );
 
     submitButton.textContent = 'Create task';
@@ -194,7 +220,7 @@ export default class Sidebar {
     const label = DOMHelper.createElement(
       'label',
       [],
-      [{ prop: 'for', value: 'task-description' }]
+      [{ prop: 'for', value: 'task-description' }],
     );
 
     const input = DOMHelper.createElement(
@@ -203,7 +229,7 @@ export default class Sidebar {
       [
         { prop: 'id', value: 'task-description' },
         { prop: 'name', value: 'task-description' },
-      ]
+      ],
     );
 
     label.textContent = 'Description';
@@ -218,6 +244,7 @@ export default class Sidebar {
     const taskDescription = this.taskDescription();
     const taskImportance = this.taskImportance();
     const taskDueDate = this.taskDueDate();
+    const taskDueTime = this.taskDueTime();
     const submitButton = this.taskFormSubmit();
 
     form.append(
@@ -225,7 +252,8 @@ export default class Sidebar {
       taskDescription,
       taskImportance,
       taskDueDate,
-      submitButton
+      taskDueTime,
+      submitButton,
     );
 
     form.id = 'task-form';
@@ -244,14 +272,13 @@ export default class Sidebar {
     const description = document.getElementById('task-description').value;
     const priority = document.getElementById('task-importance').value;
     let dueDate = document.getElementById('task-due-date').value;
+    let dueTime = document.getElementById('task-due-time').value;
     const task = { title, description, priority };
 
-    const taskId = title.trim().split(' ').map(e => {
-      return e.trim().toLowerCase().replace(/\W/gi, '');
-    });
+    const taskId = title.trim().split(' ').map(e => e.trim().toLowerCase().replace(/\W/gi, '')).join('-');
 
     task.id = taskId;
-    dueDate = moment(dueDate).format('MMM Do YYYY HH:mm');
+    dueDate = dueDate ? moment(dueDate).format('MMM Do YYYY HH:mm') : '';
     task.dueDate = dueDate;
 
     return task;
@@ -263,7 +290,7 @@ export default class Sidebar {
     const importance = document.getElementById('task-importance');
     const dueDate = document.getElementById('task-due-date');
 
-    [title, description, importance, dueDate].forEach(e => e.value = '');
+    [title, description, importance, dueDate].forEach(e => { e.value = ''; });
   }
 
   addTaskToProject() {
@@ -294,7 +321,7 @@ export default class Sidebar {
     const addTask = DOMHelper.createElement(
       'button',
       ['btn-light', 'btn', 'ml-2', 'rounded-circle', 'border'],
-      [{ prop: 'type', value: 'button' }]
+      [{ prop: 'type', value: 'button' }],
     );
 
     const box = DOMHelper.createElement('div', ['mt-4']);
@@ -328,14 +355,14 @@ export default class Sidebar {
         'shadow',
         'align-self-start',
         'p-4',
-      ]
+      ],
     );
 
     column.append(
       this.heading(),
       this.projectList(),
       this.mainActions(),
-      this.taskForm()
+      this.taskForm(),
     );
 
     return column;

@@ -47,6 +47,31 @@ export default class TodoStorage {
     }
   }
 
+  checkTaskStatus(task) {
+    if (!task.id) return { invalid: true, message: 'Invalid task name' }
+
+    const { tasks } = this.getActiveProject();
+    const taskKeys = Object.keys(tasks);
+    const taskStatus = { invalid: false };
+    let key;
+
+    console.log(tasks);
+    for (let i = 0; i < taskKeys.length; i += 1) {
+      key = taskKeys[i];
+
+      if (tasks[key].id === task.id) {
+        taskStatus.invalid = true;
+
+        taskStatus.message = [
+          'The current project already has a',
+          'task with the same title'
+        ].join(' ');
+      }
+    }
+
+    return taskStatus;
+  }
+
   titleToCamelCase(projectName) {
     let camelCased = '';
     let words = [];

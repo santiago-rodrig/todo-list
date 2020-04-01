@@ -276,9 +276,13 @@ export default class Sidebar {
     const task = { title, description, priority };
     let taskDueDate;
 
+    console.log(title);
+
     const taskId = title.trim().split(' ').map(e => {
-      e.trim().toLowerCase().replace(/\W/gi, '')
+      return e.trim().toLowerCase().replace(/\W/gi, '')
     }).join('-');
+
+    console.log(taskId);
 
     task.id = taskId;
 
@@ -304,7 +308,8 @@ export default class Sidebar {
     const importance = document.getElementById('task-importance');
     const dueDate = document.getElementById('task-due-date');
 
-    [title, description, importance, dueDate].forEach(e => { e.value = ''; });
+    [title, description, dueDate].forEach(e => { e.value = ''; });
+    importance.value = 'normal';
   }
 
   addTaskToProject() {
@@ -312,11 +317,16 @@ export default class Sidebar {
     const taskForm = document.getElementById('task-form');
     const task = this.taskFromForm();
     const taskList = document.getElementById('task-list');
+    const taskStatus = storage.checkTaskStatus(task);
 
-    this.clearTaskFields();
-    taskForm.classList.toggle('closed');
-    storage.addTask(task);
-    taskList.append((new Task(task)).render());
+    if (taskStatus.invalid) {
+      alert(taskStatus.message);
+    } else {
+      this.clearTaskFields();
+      taskForm.classList.toggle('closed');
+      storage.addTask(task);
+      taskList.append((new Task(task)).render());
+    }
   }
 
   mainActions() {

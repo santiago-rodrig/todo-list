@@ -1,5 +1,7 @@
+import moment from 'moment';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Main from './index';
+import Task from './task';
 
 export default class Sidebar {
   changeProject() {
@@ -90,21 +92,21 @@ export default class Sidebar {
     this.changeTasks();
   }
 
-  taskName() {
+  taskTitle() {
     const wrapper = DOMHelper.createElement('div', ['form-group']);
 
     const label = DOMHelper.createElement(
       'label',
       [],
-      [{ prop: 'for', value: 'task-name' }]
+      [{ prop: 'for', value: 'task-title' }]
     );
 
     const input = DOMHelper.createElement(
       'input',
       ['form-control'],
       [
-        { prop: 'id', value: 'task-name' },
-        { prop: 'name', value: 'task-name' },
+        { prop: 'id', value: 'task-title' },
+        { prop: 'name', value: 'task-title' },
         { prop: 'type', value: 'text' }
       ]
     );
@@ -176,10 +178,12 @@ export default class Sidebar {
   taskFormSubmit() {
     const submitButton = DOMHelper.createElement(
       'button',
-      ['btn', 'btn-success']
+      ['btn', 'btn-success'],
+      [{ prop: 'type', value: 'button' }]
     );
 
     submitButton.textContent = 'Create task';
+    submitButton.addEventListener('click', this.addTaskToProject.bind(this));
 
     return submitButton;
   }
@@ -210,7 +214,7 @@ export default class Sidebar {
 
   taskForm() {
     const form = DOMHelper.createElement('form', ['slider', 'closed', 'mt-4']);
-    const taskName = this.taskName();
+    const taskName = this.taskTitle();
     const taskDescription = this.taskDescription();
     const taskImportance = this.taskImportance();
     const taskDueDate = this.taskDueDate();
@@ -236,13 +240,42 @@ export default class Sidebar {
   }
 
   taskFromForm() {
+    const title = document.getElementById('task-title').value;
+    const description = document.getElementById('task-description').value;
+    const priority = document.getElementById('task-importance').value;
+    let dueDate = document.getElementById('task-due-date').value;
+    const task = { title, description, priority };
+
+    const taskId = title.trim().split(' ').map(e => {
+      return e.trim().toLowerCase().replace(/\W/gi, '');
+    });
+
+    task.id = taskId;
+    dueDate = moment(dueDate).format('MMM Do YYYY HH:mm');
+    task.dueDate = dueDate;
+
+    return task;
+  }
+
+  clearTaskFields() {
+    const title = document.getElementById('task-title');
+    const description = document.getElementById('task-description');
+    const importance = document.getElementById('task-importance');
+    const dueDate = document.getElementById('task-due-date');
+
+    [title, description, importance, dueDate].forEach(e => e.value = '');
   }
 
   addTaskToProject() {
     const storage = new TodoStorage();
-    const currentProject = document.getElementById('current-project');
+    const taskForm = document.getElementById('task-form');
     const task = this.taskFromForm();
+    const taskList = document.getElementById('task-list');
+
+    this.clearTaskFields();
+    taskForm.classList.toggle('closed');
     storage.addTask(task);
+    taskList.append((new Task(task)).render());
   }
 
   mainActions() {

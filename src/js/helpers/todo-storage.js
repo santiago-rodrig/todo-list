@@ -1,5 +1,5 @@
-import SecretKey from './secret.key.txt';
 import moment from 'moment';
+import SecretKey from './secret.key.txt';
 
 export default class TodoStorage {
   constructor() {
@@ -20,7 +20,7 @@ export default class TodoStorage {
               dueDate: moment().format('MMM Do YYYY, h:mm:ss a'),
               priority: 'normal',
               id: 'create-a-task',
-              completed: false
+              completed: false,
             },
             taskHasColors: {
               title: 'Tasks have colors!',
@@ -28,7 +28,7 @@ export default class TodoStorage {
               dueDate: moment().format('MMM Do YYYY, h:mm:ss a'),
               priority: 'important',
               id: 'tasks-have-colors',
-              completed: false
+              completed: false,
             },
             deleteATask: {
               title: 'Delete a task if you want to',
@@ -36,11 +36,11 @@ export default class TodoStorage {
               dueDate: 'No due date',
               priority: 'optional',
               id: 'delete-a-task-if-you-want-to',
-              complete: false
-            }
+              complete: false,
+            },
           },
-          active: true
-        }
+          active: true,
+        },
       };
 
       this.updateStorage();
@@ -83,11 +83,18 @@ export default class TodoStorage {
     this.projects[key] = {
       title: projectName,
       tasks: {},
-      active: true
-    }
+      active: true,
+    };
 
     this.getActiveProject().active = false;
 
+    this.updateStorage();
+  }
+
+  removeProject(projectName) {
+    const key = this.titleToCamelCase(projectName);
+    delete this.projects[key];
+    this.projects.default.active = true;
     this.updateStorage();
   }
 
@@ -114,7 +121,7 @@ export default class TodoStorage {
   }
 
   deleteTask(taskId) {
-    const tasks = this.getActiveProject().tasks;
+    const { tasks } = this.getActiveProject().tasks;
     const taskKey = this.getTaskKeyById(taskId);
 
     delete tasks[taskKey];
@@ -123,7 +130,7 @@ export default class TodoStorage {
   }
 
   completeTask(taskId) {
-    const tasks = this.getActiveProject().tasks;
+    const { tasks } = this.getActiveProject().tasks;
     const taskKey = this.getTaskKeyById(taskId);
 
     tasks[taskKey].completed = true;

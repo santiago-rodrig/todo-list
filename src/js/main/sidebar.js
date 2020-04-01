@@ -54,6 +54,21 @@ export default class Sidebar {
     return list;
   }
 
+  removeProjectHandler() {
+    const projectsList = document.getElementById('projects-list');
+    const activeProject = document.getElementById('current-project');
+    if (activeProject.textContent === 'Default') return;
+    const storage = new TodoStorage();
+    const promptAction = confirm('Are you sure you want to delete this project?');
+    if (promptAction) {
+      storage.removeProject(activeProject.textContent);
+      projectsList.removeChild(activeProject);
+      projectsList.firstChild.id = 'current-project';
+      projectsList.firstChild.classList.add('active');
+      this.changeTasks();
+    }
+  }
+
   addProjectHandler() {
     const storage = new TodoStorage();
     const projectName = prompt('Please provide the name of the project');
@@ -66,25 +81,27 @@ export default class Sidebar {
     activeProject.id = undefined;
     activeProject.classList.remove('active');
     projectsList.append(this.projectItem(storage.getActiveProject()));
+    this.changeTasks();
   }
 
   mainActions() {
     const addProject = DOMHelper.createElement(
       'button',
       ['btn-success', 'btn'],
-      [{ prop: 'type', value: 'button' }]
+      [{ prop: 'type', value: 'button' }],
     );
 
     const removeProject = DOMHelper.createElement(
       'button',
       ['btn-danger', 'btn', 'ml-2'],
-      [{ prop: 'type', value: 'button' }]
+      [{ prop: 'type', value: 'button' }],
     );
 
     const box = DOMHelper.createElement('div', ['mt-4']);
 
     addProject.textContent = 'Add';
     addProject.addEventListener('click', this.addProjectHandler.bind(this));
+    removeProject.addEventListener('click', this.removeProjectHandler.bind(this));
     removeProject.textContent = 'Remove';
     box.append(addProject, removeProject);
 

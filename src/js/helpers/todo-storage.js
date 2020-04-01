@@ -60,7 +60,7 @@ export default class TodoStorage {
 
     for (let i = 1; i < projectName.length; i += 1) {
       camelCased = projectName[i].split('').slice(1);
-      camelCased = projectName[i][0] + camelCased;
+      camelCased = projectName[i][0].toUpperCase() + camelCased.join('');
       words.push(camelCased);
     }
 

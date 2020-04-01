@@ -271,15 +271,29 @@ export default class Sidebar {
     const title = document.getElementById('task-title').value;
     const description = document.getElementById('task-description').value;
     const priority = document.getElementById('task-importance').value;
-    let dueDate = document.getElementById('task-due-date').value;
-    let dueTime = document.getElementById('task-due-time').value;
+    const dueDate = document.getElementById('task-due-date').value;
+    const dueTime = document.getElementById('task-due-time').value;
     const task = { title, description, priority };
+    let taskDueDate;
 
-    const taskId = title.trim().split(' ').map(e => e.trim().toLowerCase().replace(/\W/gi, '')).join('-');
+    const taskId = title.trim().split(' ').map(e => {
+      e.trim().toLowerCase().replace(/\W/gi, '')
+    }).join('-');
 
     task.id = taskId;
-    dueDate = dueDate ? moment(dueDate).format('MMM Do YYYY HH:mm') : '';
-    task.dueDate = dueDate;
+
+    if (dueDate && !dueTime) {
+      taskDueDate = moment(dueDate).format('MMM Do YYYY');
+    } else if (dueTime && !dueDate) {
+      taskDueDate = moment().format('Y-MM-DD') + 'T' + dueTime;
+      taskDueDate = moment(taskDueDate).format('MMM Do YYYY HH:mm');
+    } else if (!dueTime && !dueDate) {
+      taskDueDate = 'No due date';
+    } else {
+      taskDueDate = moment(dueDate + 'T' + dueTime).format('MMM Do YYYY HH:mm');
+    }
+
+    task.dueDate = taskDueDate;
 
     return task;
   }

@@ -127,8 +127,7 @@ export default class Task {
     const taskBody = this.body();
     const taskFooter = this.footer();
 
-    task.append(taskHeader, taskBody);
-    if (this.dueDate) task.appendChild(taskFooter);
+    task.append(taskHeader, taskBody, taskFooter);
     box.append(task);
     box.id = this.id;
 

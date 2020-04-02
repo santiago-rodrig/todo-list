@@ -13,10 +13,24 @@ export default class Task {
 
   header() {
     const header = DOMHelper.createElement(
-      'div', ['card-header', 'bg-dark', 'text-light'],
+      'div', ['card-header', 'bg-dark'],
     );
 
-    header.textContent = this.priority;
+    const flexContainer = DOMHelper.createElement(
+      'div', ['d-flex', 'justify-content-between', 'bg-dark'],
+    );
+
+    const deleteAction = DOMHelper.createElement(
+      'div', ['text-danger', 'task-action'],
+    );
+
+    const importance = DOMHelper.createElement('div', ['text-light']);
+
+    importance.textContent = this.priority;
+    deleteAction.innerHTML = '<i class="fas fa-window-close"></i>';
+    deleteAction.addEventListener('click', this.deleteHandler.bind(this));
+    flexContainer.append(importance, deleteAction);
+    header.append(flexContainer);
 
     return header;
   }
@@ -59,47 +73,38 @@ export default class Task {
     storage.completeTask(this.id);
   }
 
-  actions() {
-    const flexContainer = DOMHelper.createElement(
-      'div', ['d-flex', 'justify-content-end', 'bg-dark', 'p-2'],
-    );
-
-    const deleteAction = DOMHelper.createElement(
-      'div', ['text-danger', 'mx-2', 'task-action'],
-    );
-
-    const completeAction = DOMHelper.createElement(
-      'div', ['text-success', 'task-action'],
-    );
-
-    deleteAction.innerHTML = '<i class="fas fa-window-close"></i>';
-    completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
-    deleteAction.addEventListener('click', this.deleteHandler.bind(this));
-    completeAction.addEventListener('click', this.completeHandler.bind(this));
-    flexContainer.append(completeAction, deleteAction);
-
-    return flexContainer;
-  }
-
   body() {
     const body = DOMHelper.createElement('div', ['card-body']);
     const title = DOMHelper.createElement('h3', ['card-title']);
     const text = DOMHelper.createElement('p', ['card-text']);
-    const actions = this.actions();
 
     title.textContent = this.title;
     text.textContent = this.description;
-    body.append(title, text, actions);
+    body.append(title, text);
 
     return body;
   }
 
   footer() {
     const footer = DOMHelper.createElement(
-      'div', ['card-footer', 'bg-dark', 'text-light'],
+      'div', ['card-footer', 'bg-dark'],
     );
 
-    footer.textContent = this.dueDate;
+    const flexContainer = DOMHelper.createElement(
+      'div', ['d-flex', 'justify-content-between', 'bg-dark', 'p-2'],
+    );
+
+    const completeAction = DOMHelper.createElement(
+      'div', ['text-success', 'task-action'],
+    );
+
+    const complete = DOMHelper.createElement('div', ['text-light']);
+
+    complete.textContent = this.dueDate;
+    completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
+    completeAction.addEventListener('click', this.completeHandler.bind(this));
+    flexContainer.append(complete, completeAction);
+    footer.append(flexContainer);
 
     return footer;
   }

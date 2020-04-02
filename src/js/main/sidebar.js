@@ -61,12 +61,17 @@ export default class Sidebar {
     const projectsList = document.getElementById('projects-list');
     const activeProject = document.getElementById('current-project');
     const storage = new TodoStorage();
+    let promptAction;
 
-    const promptAction = confirm(
+    if (activeProject.textContent === 'Default') {
+      alert('You can\'t delete the default project');
+
+      return;
+    }
+
+    promptAction = confirm(
       'Are you sure you want to delete this project?'
     );
-
-    if (activeProject.textContent === 'Default') return;
 
     if (promptAction) {
       storage.removeProject(activeProject.textContent);
@@ -80,17 +85,23 @@ export default class Sidebar {
   addProjectHandler() {
     const storage = new TodoStorage();
     const projectName = prompt('Please provide the name of the project');
-    if (!projectName) return;
     const projectsList = document.getElementById('projects-list');
     const activeProject = document.getElementById('current-project');
+    const projectStatus = storage.checkProjectStatus(projectName);
 
-    // create the project in the local storage
-    storage.addProject(projectName);
-    // append the project to the projects list and set it to be active
-    activeProject.id = undefined;
-    activeProject.classList.remove('active');
-    projectsList.append(this.projectItem(storage.getActiveProject()));
-    this.changeTasks();
+    if (!projectName) return;
+
+    if (projectStatus.invalid) {
+      alert(projectStatus.message);
+    } else {
+      // create the project in the local storage
+      storage.addProject(projectName);
+      // append the project to the projects list and set it to be active
+      activeProject.id = undefined;
+      activeProject.classList.remove('active');
+      projectsList.append(this.projectItem(storage.getActiveProject()));
+      this.changeTasks();
+    }
   }
 
   taskTitle() {
@@ -344,7 +355,7 @@ export default class Sidebar {
 
     const addTask = DOMHelper.createElement(
       'button',
-      ['btn-light', 'btn', 'ml-2', 'rounded-circle', 'border'],
+      ['btn-light', 'btn', 'ml-2', 'rounded', 'border'],
       [{ prop: 'type', value: 'button' }],
     );
 
@@ -354,7 +365,7 @@ export default class Sidebar {
     addProject.addEventListener('click', this.addProjectHandler.bind(this));
     removeProject.addEventListener('click', this.removeProjectHandler.bind(this));
     removeProject.textContent = 'Remove';
-    addTask.innerHTML = '<i class="fas fa-plus"></i>';
+    addTask.innerHTML = 'Add a task';
     addTask.addEventListener('click', this.displayForm);
     box.append(addProject, removeProject, addTask);
 

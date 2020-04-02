@@ -3,7 +3,7 @@ import { DOMHelper } from '../helpers';
 import Form from './form';
 
 export default class TasksController {
-  setModal(action) {
+  setModal(action, task) {
     const modalTitle = document.querySelector('#tasks-modal .modal-title');
     const modalBody = document.querySelector('#tasks-modal .modal-body');
 
@@ -20,7 +20,7 @@ export default class TasksController {
     } else {
       modalTitle.textContent = 'Editing a task';
       DOMHelper.emptyElement(modalBody);
-      modalBody.append((new Form('edit')).render());
+      modalBody.append((new Form('edit', task)).render());
       modalButton.textContent = 'Edit task';
       modalButton.classList.add('btn-primary');
     }

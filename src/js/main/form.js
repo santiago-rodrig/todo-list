@@ -7,47 +7,8 @@ export default class Form {
     // things like add-* or edit-*
     this.prefix = prefix;
     this.task = task;
-    // you'll set previous id when creating an update form
-  }
 
-  buildTask() {
-    const title = document.getElementById(`${this.prefix}-task-title`).value;
-    const description = document.getElementById(`${this.prefix}-task-description`).value;
-    const priority = document.getElementById(`${this.prefix}-task-importance`).value;
-    let dueDate = document.getElementById(`${this.prefix}-task-due-date`).value;
-    const dueTime = document.getElementById(`${this.prefix}-task-due-time`).value;
-    const task = { title, description, priority };
-
-    const taskId = title.trim().split(' ').map(e => {
-      return e.trim().toLowerCase().replace(/\W/gi, '')
-    }).join('-');
-
-    task.id = taskId;
-
-    if (dueDate && !dueTime) {
-      dueDate = moment(dueDate).format('MMM Do YYYY');
-    } else if (dueTime && !dueDate) {
-      dueDate = moment().format('Y-MM-DD') + 'T' + dueTime;
-      dueDate = moment(dueDate).format('MMM Do YYYY HH:mm');
-    } else if (!dueTime && !dueDate) {
-      dueDate = 'No due date';
-    } else {
-      dueDate = moment(dueDate + 'T' + dueTime).format('MMM Do YYYY HH:mm');
-    }
-
-    task.dueDate = dueDate;
-
-    return task;
-  }
-
-  clearFields() {
-    const title = document.getElementById(`${this.prefix}-task-title`);
-    const description = document.getElementById(`${this.prefix}-task-description`);
-    const priority = document.getElementById(`${this.prefix}-task-priority`);
-    const dueDate = document.getElementById(`${this.prefix}-task-due-date`);
-
-    [title, description, dueDate].forEach(e => { e.value = ''; });
-    priority.value = 'normal';
+    console.log(this);
   }
 
   title() {
@@ -71,6 +32,8 @@ export default class Form {
 
     label.textContent = 'Title';
     wrapper.append(label, input);
+
+    if (this.prefix === 'edit') input.value = this.task.title;
 
     return wrapper;
   }
@@ -99,10 +62,16 @@ export default class Form {
 
     label.textContent = 'Priority';
     normal.textContent = 'normal';
-    normal.setAttribute('selected', 'selected');
     important.textContent = 'important';
     optional.textContent = 'optional';
     input.append(normal, important, optional);
+
+    if (this.prefix === 'edit') {
+      input.value = this.task.priority;
+    } else {
+      input.value = 'normal';
+    }
+
     wrapper.append(label, input);
 
     return wrapper;
@@ -110,6 +79,7 @@ export default class Form {
 
   dueDate() {
     const wrapper = DOMHelper.createElement('div', ['form-group']);
+    let date;
 
     const label = DOMHelper.createElement(
       'label',
@@ -130,11 +100,21 @@ export default class Form {
     label.textContent = 'Due date';
     wrapper.append(label, input);
 
+    if (this.prefix === 'edit') {
+      if (this.task.dueDate === 'No due date') {
+        input.value = '';
+      } else {
+        date = moment(this.task.dueDate, 'MMM Do YYYY HH:mm');
+        input.value = date.format('Y-MM-DD');
+      }
+    }
+
     return wrapper;
   }
 
   dueTime() {
     const wrapper = DOMHelper.createElement('div', ['form-group']);
+    let time;
 
     const label = DOMHelper.createElement(
       'label',
@@ -154,6 +134,20 @@ export default class Form {
 
     label.textContent = 'Due Time';
     wrapper.append(label, input);
+
+    if (this.prefix === 'edit') {
+      if (this.task.dueDate === 'No due date') {
+        input.value = '';
+      } else {
+        time = moment(this.task.dueDate, 'MMM Do YYYY HH:mm');
+
+        if ((time.hour === 0) && (time.minute === 0)) {
+          input.value = '';
+        } else {
+          input.value = time.format('HH:mm');
+        }
+      }
+    }
 
     return wrapper;
   }
@@ -178,6 +172,8 @@ export default class Form {
 
     label.textContent = 'Description';
     wrapper.append(label, input);
+
+    if (this.prefix === 'edit') input.value = this.task.description;
 
     return wrapper;
   }

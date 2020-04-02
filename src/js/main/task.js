@@ -119,7 +119,7 @@ export default class Task {
 
     editAction.addEventListener(
       'click',
-      tasksController.setModal.bind(tasksController, 'edit')
+      tasksController.setModal.bind(tasksController, 'edit', this)
     );
 
     completeAction.addEventListener('click', this.completeHandler.bind(this));

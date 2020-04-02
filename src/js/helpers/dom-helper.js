@@ -16,4 +16,10 @@ const createElement = (type, classes = null, attributes = null) => {
   return element;
 };
 
-export { createElement };
+const emptyElement = (element) => {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+}
+
+export { createElement, emptyElement };

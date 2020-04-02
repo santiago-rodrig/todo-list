@@ -158,42 +158,6 @@ export default class Form {
     return wrapper;
   }
 
-  submitButton() {
-    const submitButton = DOMHelper.createElement(
-      'button',
-      ['btn', 'btn-success'],
-      [{ prop: 'type', value: 'button' }],
-    );
-
-    const storage = new TodoStorage();
-    const tasksController = new TasksController();
-
-    if (this.prefix === 'add') {
-      submitButton.textContent = 'Create task';
-      submitButton.addEventListener(
-        'click',
-        tasksController.addTaskToProject.bind(
-          tasksController,
-          storage,
-          this.buildTask // pass the function instead
-        )
-      );
-    } else {
-      submitButton.textContent = 'Edit task';
-      submitButton.addEventListener(
-        'click',
-        tasksController.updateProjectTask.bind(
-          tasksController,
-          storage,
-          this.buildTask.bind(this),
-          this.previousId
-        )
-      );
-    }
-
-    return submitButton;
-  }
-
   description() {
     const wrapper = DOMHelper.createElement('div', ['form-group']);
 
@@ -225,15 +189,13 @@ export default class Form {
     const priority = this.priority();
     const dueDate = this.dueDate();
     const dueTime = this.dueTime();
-    const submitButton = this.submitButton();
 
     form.append(
       taskName,
       description,
       priority,
       dueDate,
-      dueTime,
-      submitButton,
+      dueTime
     );
 
     form.id = `${this.prefix}-task-form`;

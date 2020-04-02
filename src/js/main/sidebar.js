@@ -2,6 +2,7 @@ import moment from 'moment';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Main from './index';
 import Task from './task';
+import TasksController from './tasks_controller';
 import Form from './form';
 
 export default class Sidebar {
@@ -138,16 +139,25 @@ export default class Sidebar {
     const addTask = DOMHelper.createElement(
       'button',
       ['btn-light', 'btn', 'ml-2', 'rounded', 'border'],
-      [{ prop: 'type', value: 'button' }],
+      [
+        { prop: 'type', value: 'button' },
+        { prop: 'data-toggle', value: 'modal' },
+        { prop: 'data-target', value: '#tasks-modal' }
+      ]
     );
 
     const box = DOMHelper.createElement('div', ['mt-4']);
+    const tasksController = new TasksController();
 
     addProject.textContent = 'Add';
     addProject.addEventListener('click', this.addProjectHandler.bind(this));
     removeProject.addEventListener('click', this.removeProjectHandler.bind(this));
     removeProject.textContent = 'Remove';
     addTask.innerHTML = 'Add a task';
+    addTask.addEventListener(
+      'click',
+      tasksController.setModal.bind(tasksController, 'add')
+    );
     box.append(addProject, removeProject, addTask);
 
     return box;

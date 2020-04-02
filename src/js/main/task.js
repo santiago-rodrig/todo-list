@@ -1,5 +1,6 @@
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
+import TasksController from './tasks_controller';
 
 export default class Task {
   constructor(task) {
@@ -86,16 +87,6 @@ export default class Task {
     return body;
   }
 
-  setEditTaskForm(task) {
-    const form = new Form('edit', this);
-    console.log(form);
-    const tasksModalBody = document.querySelector('#tasks-modal .modal-body');
-    console.log(tasksModalBody);
-
-    tasksModalBody.removeChild(tasksModalBody.firstChild);
-    tasksModalBody.append(form.render());
-  }
-
   footer() {
     const footer = DOMHelper.createElement(
       'div', ['card-footer', 'bg-dark'],
@@ -119,13 +110,18 @@ export default class Task {
     );
 
     const actions = DOMHelper.createElement('div', ['d-flex']);
-
     const dueDate = DOMHelper.createElement('div', ['text-light']);
+    const tasksController = new TasksController();
 
     dueDate.textContent = this.dueDate;
     completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
     editAction.innerHTML = '<i class="fas fa-edit"></i>';
-    editAction.addEventListener('click', this.setEditTaskForm.bind(this));
+
+    editAction.addEventListener(
+      'click',
+      tasksController.setModal.bind(tasksController, 'edit')
+    );
+
     completeAction.addEventListener('click', this.completeHandler.bind(this));
     actions.append(editAction, completeAction);
     flexContainer.append(dueDate, actions);

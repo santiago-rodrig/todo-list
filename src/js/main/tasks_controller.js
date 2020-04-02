@@ -14,28 +14,30 @@ export default class TasksController {
     const taskElement = document.getElementById(previousId);
     const task = buildTask();
 
+    console.log(buildTask);
+
     const taskPriority = taskElement.querySelector(
-      'card-header > *:first-child'
+      'card-header > *:first-child',
     );
 
     const taskTitle = taskElement.querySelector(
-      'card-body card-title'
+      'card-body card-title',
     );
 
     const taskDescription = taskElement.querySelector(
-      'card-body card-text'
+      'card-body card-text',
     );
 
     const taskDueDate = taskElement.querySelector(
-      'card-footer > *:first-child'
+      'card-footer > *:first-child',
     );
 
     taskPriority.textContent = task.priority;
     taskTitle.textContent = task.title;
     taskDescription.textContent = task.description;
     taskDueDate.textContent = task.dueDate;
-    taskElement.id = task.id
+    taskElement.id = task.id;
     // update the storage here
-    storage.updateTask(previousId, taskId, task);
+    storage.updateTask(previousId, task);
   }
 }

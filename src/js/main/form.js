@@ -1,10 +1,12 @@
+import moment from 'moment';
 import TasksController from './tasks_controller';
 import { DOMHelper, TodoStorage } from '../helpers';
 
 export default class Form {
-  constructor(prefix) {
+  constructor(prefix, task) {
     // things like add-* or edit-*
     this.prefix = prefix;
+    this.task = task;
     // you'll set previous id when creating an update form
   }
 
@@ -183,7 +185,7 @@ export default class Form {
         tasksController.updateProjectTask.bind(
           tasksController,
           storage,
-          this.buildTask,
+          this.buildTask.bind(this),
           this.previousId
         )
       );

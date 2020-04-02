@@ -7,6 +7,7 @@ import Header from './header';
 import Footer from './footer';
 import Main from './main';
 import Sidebar from './main/sidebar';
+import Form from './main/form';
 import { DOMHelper } from './helpers';
 
 const header = new Header();
@@ -21,8 +22,8 @@ function editTaskModal() {
       { prop: 'role', value: 'dialog' },
       { prop: 'id', value: 'tasks-modal' },
       { prop: 'aria-labelledby', value: 'tasks-modal-label' },
-      { prop: 'aria-hidden', value: 'true' }
-    ]
+      { prop: 'aria-hidden', value: 'true' },
+    ],
   );
 
   const modalDialog = DOMHelper.createElement(
@@ -30,7 +31,7 @@ function editTaskModal() {
     ['modal-dialog'],
     [
       { prop: 'role', value: 'document' },
-    ]
+    ],
   );
 
   const modalContent = DOMHelper.createElement('div', ['modal-content']);
@@ -40,8 +41,8 @@ function editTaskModal() {
     'h3',
     ['modal-title'],
     [
-      { prop: 'id', value: 'tasks-modal-label' }
-    ]
+      { prop: 'id', value: 'tasks-modal-label' },
+    ],
   );
 
   const closeButton = DOMHelper.createElement(
@@ -50,12 +51,13 @@ function editTaskModal() {
     [
       { prop: 'type', value: 'button' },
       { prop: 'data-dismiss', value: 'modal' },
-      { prop: 'aria-lable', value: 'close' }
-    ]
+      { prop: 'aria-lable', value: 'close' },
+    ],
   );
 
   const modalBody = DOMHelper.createElement('div', ['modal-body']);
-
+  const form = new Form('add');
+  modalBody.append(form.render());
   modalTitle.textContent = 'Editing task';
   closeButton.innerHTML = '&times;';
   modalHeader.append(modalTitle, closeButton);
@@ -69,5 +71,5 @@ function editTaskModal() {
 const main = new Main();
 
 document.body.append(
-  header.render(), main.render(), footer.render(), editTaskModal()
+  header.render(), main.render(), footer.render(), editTaskModal(),
 );

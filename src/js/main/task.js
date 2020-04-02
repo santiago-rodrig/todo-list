@@ -8,7 +8,7 @@ export default class Task {
     this.dueDate = task.dueDate;
     this.priority = task.priority;
     this.id = this.title.trim().split(' ').map(
-      e => e.toLowerCase().trim().replace(/\W/gi, '')
+      e => e.toLowerCase().trim().replace(/\W/gi, ''),
     ).join('-');
   }
 
@@ -86,12 +86,13 @@ export default class Task {
     return body;
   }
 
-  setEditTaskForm() {
-    const form = new Form('edit');
+  setEditTaskForm(task) {
+    const form = new Form('edit', this);
     console.log(form);
     const tasksModalBody = document.querySelector('#tasks-modal .modal-body');
     console.log(tasksModalBody);
 
+    tasksModalBody.removeChild(tasksModalBody.firstChild);
     tasksModalBody.append(form.render());
   }
 
@@ -113,8 +114,8 @@ export default class Task {
       ['text-light', 'task-action', 'mr-2'],
       [
         { prop: 'data-toggle', value: 'modal' },
-        { prop: 'data-target', value: '#tasks-modal' }
-      ]
+        { prop: 'data-target', value: '#tasks-modal' },
+      ],
     );
 
     const actions = DOMHelper.createElement('div', ['d-flex']);
@@ -124,9 +125,9 @@ export default class Task {
     dueDate.textContent = this.dueDate;
     completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
     editAction.innerHTML = '<i class="fas fa-edit"></i>';
-    editAction.addEventListener('click', this.setEditTaskForm);
+    editAction.addEventListener('click', this.setEditTaskForm.bind(this));
     completeAction.addEventListener('click', this.completeHandler.bind(this));
-    actions.append(editAction, completeAction)
+    actions.append(editAction, completeAction);
     flexContainer.append(dueDate, actions);
     footer.append(flexContainer);
 

@@ -188,10 +188,10 @@ export default class TodoStorage {
     this.updateStorage();
   }
 
-  updateTask(previousId, taskId, task) {
+  updateTask(previousId, task) {
     const { tasks } = this.getActiveProject();
     const previousKey = this.getTaskKeyById(previousId);
-    const newKey = this.getTaskKeyById(taskId);
+    const newKey = this.getTaskKeyById(task.id);
 
     if (previousKey === newKey) {
       tasks[newKey] = task;

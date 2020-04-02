@@ -2,6 +2,7 @@ import moment from 'moment';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Main from './index';
 import Task from './task';
+import Form from './form';
 
 export default class Sidebar {
   changeProject() {
@@ -104,225 +105,6 @@ export default class Sidebar {
     }
   }
 
-  taskTitle() {
-    const wrapper = DOMHelper.createElement('div', ['form-group']);
-
-    const label = DOMHelper.createElement(
-      'label',
-      [],
-      [{ prop: 'for', value: 'task-title' }],
-    );
-
-    const input = DOMHelper.createElement(
-      'input',
-      ['form-control'],
-      [
-        { prop: 'id', value: 'task-title' },
-        { prop: 'name', value: 'task-title' },
-        { prop: 'type', value: 'text' },
-      ],
-    );
-
-    label.textContent = 'Title';
-    wrapper.append(label, input);
-
-    return wrapper;
-  }
-
-  taskImportance() {
-    const wrapper = DOMHelper.createElement('div', ['form-group']);
-
-    const label = DOMHelper.createElement(
-      'label',
-      [],
-      [{ prop: 'for', value: 'task-importance' }],
-    );
-
-    const input = DOMHelper.createElement(
-      'select',
-      ['form-control'],
-      [
-        { prop: 'id', value: 'task-importance' },
-        { prop: 'name', value: 'task-importance' },
-      ],
-    );
-
-    const normal = document.createElement('option');
-    const important = document.createElement('option');
-    const optional = document.createElement('option');
-
-    label.textContent = 'Importance';
-    normal.textContent = 'normal';
-    normal.setAttribute('selected', 'selected');
-    important.textContent = 'important';
-    optional.textContent = 'optional';
-    input.append(normal, important, optional);
-    wrapper.append(label, input);
-
-    return wrapper;
-  }
-
-  taskDueDate() {
-    const wrapper = DOMHelper.createElement('div', ['form-group']);
-
-    const label = DOMHelper.createElement(
-      'label',
-      [],
-      [{ prop: 'for', value: 'task-due-date' }],
-    );
-
-    const input = DOMHelper.createElement(
-      'input',
-      ['form-control'],
-      [
-        { prop: 'id', value: 'task-due-date' },
-        { prop: 'name', value: 'task-due-date' },
-        { prop: 'type', value: 'date' },
-      ],
-    );
-
-    label.textContent = 'Due date';
-    wrapper.append(label, input);
-
-    return wrapper;
-  }
-
-  taskDueTime() {
-    const wrapper = DOMHelper.createElement('div', ['form-group']);
-
-    const label = DOMHelper.createElement(
-      'label',
-      [],
-      [{ prop: 'for', value: 'task-due-time' }],
-    );
-
-    const input = DOMHelper.createElement(
-      'input',
-      ['form-control'],
-      [
-        { prop: 'id', value: 'task-due-time' },
-        { prop: 'name', value: 'task-due-time' },
-        { prop: 'type', value: 'time' },
-      ],
-    );
-
-    label.textContent = 'Due Time';
-    wrapper.append(label, input);
-
-    return wrapper;
-  }
-
-  taskFormSubmit() {
-    const submitButton = DOMHelper.createElement(
-      'button',
-      ['btn', 'btn-success'],
-      [{ prop: 'type', value: 'button' }],
-    );
-
-    submitButton.textContent = 'Create task';
-    submitButton.addEventListener('click', this.addTaskToProject.bind(this));
-
-    return submitButton;
-  }
-
-  taskDescription() {
-    const wrapper = DOMHelper.createElement('div', ['form-group']);
-
-    const label = DOMHelper.createElement(
-      'label',
-      [],
-      [{ prop: 'for', value: 'task-description' }],
-    );
-
-    const input = DOMHelper.createElement(
-      'textarea',
-      ['form-control'],
-      [
-        { prop: 'id', value: 'task-description' },
-        { prop: 'name', value: 'task-description' },
-      ],
-    );
-
-    label.textContent = 'Description';
-    wrapper.append(label, input);
-
-    return wrapper;
-  }
-
-  taskForm() {
-    const form = DOMHelper.createElement('form', ['slider', 'closed', 'mt-4']);
-    const taskName = this.taskTitle();
-    const taskDescription = this.taskDescription();
-    const taskImportance = this.taskImportance();
-    const taskDueDate = this.taskDueDate();
-    const taskDueTime = this.taskDueTime();
-    const submitButton = this.taskFormSubmit();
-
-    form.append(
-      taskName,
-      taskDescription,
-      taskImportance,
-      taskDueDate,
-      taskDueTime,
-      submitButton,
-    );
-
-    form.id = 'task-form';
-
-    return form;
-  }
-
-  displayForm() {
-    const form = document.getElementById('task-form');
-
-    form.classList.toggle('closed');
-  }
-
-  taskFromForm() {
-    const title = document.getElementById('task-title').value;
-    const description = document.getElementById('task-description').value;
-    const priority = document.getElementById('task-importance').value;
-    const dueDate = document.getElementById('task-due-date').value;
-    const dueTime = document.getElementById('task-due-time').value;
-    const task = { title, description, priority };
-    let taskDueDate;
-
-    console.log(title);
-
-    const taskId = title.trim().split(' ').map(e => {
-      return e.trim().toLowerCase().replace(/\W/gi, '')
-    }).join('-');
-
-    console.log(taskId);
-
-    task.id = taskId;
-
-    if (dueDate && !dueTime) {
-      taskDueDate = moment(dueDate).format('MMM Do YYYY');
-    } else if (dueTime && !dueDate) {
-      taskDueDate = moment().format('Y-MM-DD') + 'T' + dueTime;
-      taskDueDate = moment(taskDueDate).format('MMM Do YYYY HH:mm');
-    } else if (!dueTime && !dueDate) {
-      taskDueDate = 'No due date';
-    } else {
-      taskDueDate = moment(dueDate + 'T' + dueTime).format('MMM Do YYYY HH:mm');
-    }
-
-    task.dueDate = taskDueDate;
-
-    return task;
-  }
-
-  clearTaskFields() {
-    const title = document.getElementById('task-title');
-    const description = document.getElementById('task-description');
-    const importance = document.getElementById('task-importance');
-    const dueDate = document.getElementById('task-due-date');
-
-    [title, description, dueDate].forEach(e => { e.value = ''; });
-    importance.value = 'normal';
-  }
-
   addTaskToProject() {
     const storage = new TodoStorage();
     const taskForm = document.getElementById('task-form');
@@ -366,7 +148,6 @@ export default class Sidebar {
     removeProject.addEventListener('click', this.removeProjectHandler.bind(this));
     removeProject.textContent = 'Remove';
     addTask.innerHTML = 'Add a task';
-    addTask.addEventListener('click', this.displayForm);
     box.append(addProject, removeProject, addTask);
 
     return box;
@@ -385,7 +166,8 @@ export default class Sidebar {
       'div',
       [
         'col-12',
-        'col-md-4',
+        'col-md-6',
+        'col-lg-4',
         'border',
         'shadow',
         'align-self-start',
@@ -397,7 +179,6 @@ export default class Sidebar {
       this.heading(),
       this.projectList(),
       this.mainActions(),
-      this.taskForm(),
     );
 
     return column;

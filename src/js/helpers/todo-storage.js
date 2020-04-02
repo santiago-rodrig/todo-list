@@ -158,6 +158,7 @@ export default class TodoStorage {
       }
     }
 
+    // it might be null
     return taskKey;
   }
 
@@ -183,6 +184,21 @@ export default class TodoStorage {
     const key = this.titleToCamelCase(task.title);
 
     this.getActiveProject().tasks[key] = task;
+
+    this.updateStorage();
+  }
+
+  updateTask(previousId, taskId, task) {
+    const { tasks } = this.getActiveProject();
+    const previousKey = this.getTaskKeyById(previousId);
+    const newKey = this.getTaskKeyById(taskId);
+
+    if (previousKey === newKey) {
+      tasks[newKey] = task;
+    } else {
+      delete tasks[previousKey];
+      tasks[newKey] = task;
+    }
 
     this.updateStorage();
   }

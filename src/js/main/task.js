@@ -1,4 +1,5 @@
 import { DOMHelper, TodoStorage } from '../helpers';
+import Form from './form';
 
 export default class Task {
   constructor(task) {
@@ -24,12 +25,12 @@ export default class Task {
       'div', ['text-danger', 'task-action'],
     );
 
-    const importance = DOMHelper.createElement('div', ['text-light']);
+    const priority = DOMHelper.createElement('div', ['text-light']);
 
-    importance.textContent = this.priority;
+    priority.textContent = this.priority;
     deleteAction.innerHTML = '<i class="fas fa-window-close"></i>';
     deleteAction.addEventListener('click', this.deleteHandler.bind(this));
-    flexContainer.append(importance, deleteAction);
+    flexContainer.append(priority, deleteAction);
     header.append(flexContainer);
 
     return header;
@@ -85,6 +86,15 @@ export default class Task {
     return body;
   }
 
+  setEditTaskForm() {
+    const form = new Form('edit');
+    console.log(form);
+    const tasksModalBody = document.querySelector('#tasks-modal .modal-body');
+    console.log(tasksModalBody);
+
+    tasksModalBody.append(form.render());
+  }
+
   footer() {
     const footer = DOMHelper.createElement(
       'div', ['card-footer', 'bg-dark'],
@@ -98,12 +108,26 @@ export default class Task {
       'div', ['text-success', 'task-action'],
     );
 
-    const complete = DOMHelper.createElement('div', ['text-light']);
+    const editAction = DOMHelper.createElement(
+      'div',
+      ['text-light', 'task-action', 'mr-2'],
+      [
+        { prop: 'data-toggle', value: 'modal' },
+        { prop: 'data-target', value: '#tasks-modal' }
+      ]
+    );
 
-    complete.textContent = this.dueDate;
+    const actions = DOMHelper.createElement('div', ['d-flex']);
+
+    const dueDate = DOMHelper.createElement('div', ['text-light']);
+
+    dueDate.textContent = this.dueDate;
     completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
+    editAction.innerHTML = '<i class="fas fa-edit"></i>';
+    editAction.addEventListener('click', this.setEditTaskForm);
     completeAction.addEventListener('click', this.completeHandler.bind(this));
-    flexContainer.append(complete, completeAction);
+    actions.append(editAction, completeAction)
+    flexContainer.append(dueDate, actions);
     footer.append(flexContainer);
 
     return footer;
@@ -111,7 +135,7 @@ export default class Task {
 
   render() {
     const box = DOMHelper.createElement(
-      'div', ['col-12', 'col-md-6', 'my-4'],
+      'div', ['col-12', 'col-lg-6', 'my-4'],
     );
 
     const task = DOMHelper.createElement('div', ['card']);

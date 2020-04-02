@@ -15,7 +15,7 @@ export default class Main {
   tasks() {
     const storage = new TodoStorage();
     const tasks = storage.getActiveProject().tasks;
-    const container = DOMHelper.createElement('div', ['col-12', 'col-md-8']);
+    const container = DOMHelper.createElement('div', ['col-12', 'col-md-6', 'col-lg-8']);
     const heading = this.heading();
 
     const taskList = DOMHelper.createElement(

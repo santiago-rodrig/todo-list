@@ -82,7 +82,6 @@ export default class TasksController {
     let task;
 
     if (!dueDate && !dueTime) {
-      alert('No due date!');
       taskDueDate = 'No due date';
     } else if (!dueDate && dueTime) {
       taskDueDate = `Today ${moment(dueTime, 'HH:mm').format('h:mm a')}`;

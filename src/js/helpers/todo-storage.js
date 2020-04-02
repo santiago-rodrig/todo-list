@@ -9,7 +9,7 @@ export default class TodoStorage {
       const parsed = JSON.parse(localStorage.getItem(this.storageEntry));
 
       this.projects = parsed.projects;
-      this.lastId = parsed.lastId;
+      this.nextId = parsed.nextId;
     } else {
       this.projects = {
         default: {
@@ -156,7 +156,7 @@ export default class TodoStorage {
 
   updateStorage() {
     const item = JSON.stringify(
-      { projects: this.projects, lastId: this.nextId }
+      { projects: this.projects, nextId: this.nextId }
     );
 
     localStorage.setItem(this.storageEntry, item);

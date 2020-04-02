@@ -7,8 +7,6 @@ export default class Form {
     // things like add-* or edit-*
     this.prefix = prefix;
     this.task = task;
-
-    console.log(this);
   }
 
   title() {

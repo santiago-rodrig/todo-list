@@ -8,34 +8,35 @@ export default class TodoStorage {
     if (localStorage.getItem(this.storageEntry)) {
       const parsed = JSON.parse(localStorage.getItem(this.storageEntry));
 
-      this.projects = parsed;
+      this.projects = parsed.projects;
+      this.lastId = parsed.lastId;
     } else {
       this.projects = {
         default: {
           title: 'Default',
           tasks: {
-            createATask: {
+            0: {
               title: 'Create a task!',
               description: 'You can create some tasks by clicking the + button.',
               dueDate: moment().format('MMM Do YYYY HH:mm'),
               priority: 'normal',
-              id: 'create-a-task',
+              id: '0',
               completed: false,
             },
-            taskHasColors: {
+            1: {
               title: 'Tasks have colors!',
               description: 'Tasks have different colors depending on the priority.',
               dueDate: moment().format('MMM Do YYYY HH:mm'),
               priority: 'important',
-              id: 'tasks-have-colors',
+              id: '1',
               completed: false,
             },
-            deleteATask: {
+            2: {
               title: 'Delete a task if you want to',
               description: 'Remove an unwanted task any time.',
               dueDate: 'No due date',
               priority: 'optional',
-              id: 'delete-a-task-if-you-want-to',
+              id: '2',
               complete: false,
             },
           },
@@ -43,6 +44,7 @@ export default class TodoStorage {
         },
       };
 
+      this.lastId = 2;
       this.updateStorage();
     }
   }
@@ -62,25 +64,39 @@ export default class TodoStorage {
     return projectStatus;
   }
 
-  checkTaskStatus(task) {
-    if (!task.id) return { invalid: true, message: 'Invalid task name' }
+  checkTaskStatus(task, action) {
+    if (!task.title.trim().replace(/\W/gi, '')) {
+      return { invalid: true, message: 'Invalid task name' };
+    }
 
     const { tasks } = this.getActiveProject();
     const taskKeys = Object.keys(tasks);
     const taskStatus = { invalid: false };
     let key;
 
-    console.log(tasks);
     for (let i = 0; i < taskKeys.length; i += 1) {
       key = taskKeys[i];
 
-      if (tasks[key].id === task.id) {
-        taskStatus.invalid = true;
+      if (action !== 'edit') {
+        if (tasks[key].title === task.title) {
+          taskStatus.invalid = true;
 
-        taskStatus.message = [
-          'The current project already has a',
-          'task with the same title'
-        ].join(' ');
+          taskStatus.message = [
+            'The current project already has a',
+            'task with the same title'
+          ].join(' ');
+        }
+      } else {
+        if (tasks[key].id !== task.id) {
+          if (tasks[key].title === task.title) {
+            taskStatus.invalid = true;
+
+            taskStatus.message = [
+              'The current project already has a',
+              'task with the same title'
+            ].join(' ');
+          }
+        }
       }
     }
 
@@ -139,7 +155,9 @@ export default class TodoStorage {
   }
 
   updateStorage() {
-    const item = JSON.stringify(this.projects);
+    const item = JSON.stringify(
+      { projects: this.projects, lastId: this.lastId }
+    );
 
     localStorage.setItem(this.storageEntry, item);
   }
@@ -188,18 +206,10 @@ export default class TodoStorage {
     this.updateStorage();
   }
 
-  updateTask(previousId, task) {
+  updateTask(task) {
     const { tasks } = this.getActiveProject();
-    const previousKey = this.getTaskKeyById(previousId);
-    const newKey = this.getTaskKeyById(task.id);
 
-    if (previousKey === newKey) {
-      tasks[newKey] = task;
-    } else {
-      delete tasks[previousKey];
-      tasks[newKey] = task;
-    }
-
+    tasks[task.id] = task;
     this.updateStorage();
   }
 

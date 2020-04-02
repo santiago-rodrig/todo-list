@@ -17,6 +17,7 @@ export default class Main {
     const tasks = storage.getActiveProject().tasks;
     const container = DOMHelper.createElement('div', ['col-12', 'col-md-6', 'col-lg-8']);
     const heading = this.heading();
+    let taskElement;
 
     const taskList = DOMHelper.createElement(
       'div', ['row', 'justify-content-even']

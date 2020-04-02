@@ -8,9 +8,7 @@ export default class Task {
     this.description = task.description;
     this.dueDate = task.dueDate;
     this.priority = task.priority;
-    this.id = this.title.trim().split(' ').map(
-      e => e.toLowerCase().trim().replace(/\W/gi, ''),
-    ).join('-');
+    this.id = task.id;
   }
 
   header() {
@@ -154,8 +152,8 @@ export default class Task {
     const taskFooter = this.footer();
 
     task.append(taskHeader, taskBody, taskFooter);
+    task.id = `task-${this.id}`;
     box.append(task);
-    box.id = this.id;
 
     return box;
   }

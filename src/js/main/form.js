@@ -179,7 +179,7 @@ export default class Form {
   }
 
   render() {
-    const form = DOMHelper.createElement('form', ['mt-4']);
+    const form = DOMHelper.createElement('form');
     const taskName = this.title();
     const description = this.description();
     const priority = this.priority();

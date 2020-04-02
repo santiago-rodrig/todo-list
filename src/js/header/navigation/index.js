@@ -12,7 +12,7 @@ export default class Navigation {
     const container = DOMHelper.createElement('li', ['nav-item', 'dropleft']);
     const anchor = DOMHelper.createElement(
       'a',
-      ['nav-link', 'dropdown-toggle', 'text-white'],
+      ['nav-link', 'dropdown-toggle', 'text-dark'],
       [
         { prop: 'data-toggle', value: 'dropdown' },
         { prop: 'href', value: '#' },

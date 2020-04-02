@@ -44,7 +44,7 @@ export default class TodoStorage {
         },
       };
 
-      this.lastId = 2;
+      this.nextId = 3;
       this.updateStorage();
     }
   }
@@ -156,52 +156,31 @@ export default class TodoStorage {
 
   updateStorage() {
     const item = JSON.stringify(
-      { projects: this.projects, lastId: this.lastId }
+      { projects: this.projects, lastId: this.nextId }
     );
 
     localStorage.setItem(this.storageEntry, item);
   }
 
-  getTaskKeyById(taskId) {
-    const { tasks } = this.getActiveProject();
-    const taskKeys = Object.keys(tasks);
-    console.log(taskKeys);
-    let taskKey;
-
-    for (let i = 0; i < taskKeys.length; i += 1) {
-      if (tasks[taskKeys[i]].id === taskId) {
-        taskKey = taskKeys[i];
-
-        break;
-      }
-    }
-
-    // it might be null
-    return taskKey;
-  }
-
   deleteTask(taskId) {
     const { tasks } = this.getActiveProject();
-    const taskKey = this.getTaskKeyById(taskId);
 
-    delete tasks[taskKey];
+    delete tasks[taskId];
 
     this.updateStorage();
   }
 
   completeTask(taskId) {
     const { tasks } = this.getActiveProject();
-    const taskKey = this.getTaskKeyById(taskId);
 
-    tasks[taskKey].completed = true;
+    tasks[task.id].completed = true;
 
     this.updateStorage();
   }
 
   addTask(task) {
-    const key = this.titleToCamelCase(task.title);
-
-    this.getActiveProject().tasks[key] = task;
+    this.getActiveProject().tasks[task.id] = task;
+    this.nextId += 1;
 
     this.updateStorage();
   }

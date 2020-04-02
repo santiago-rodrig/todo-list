@@ -23,7 +23,7 @@ export default class Main {
       'div', ['row', 'justify-content-even']
     );
 
-    taskList.id = 'task-list';
+    taskList.id = 'tasks-list';
 
     Object.values(tasks).forEach(task => {
       if (!task.completed) {

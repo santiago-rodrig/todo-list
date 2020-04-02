@@ -20,15 +20,6 @@ export default class Sidebar {
     storage.changeToProject(this.textContent);
   }
 
-  changeTasks() {
-    const main = new Main();
-    const tasksContainer = document.getElementById('tasks-container');
-    const row = tasksContainer.parentNode;
-
-    row.removeChild(tasksContainer);
-    row.append(main.tasks());
-  }
-
   projectItem(project) {
     const item = DOMHelper.createElement('li', ['list-group-item']);
 
@@ -106,23 +97,6 @@ export default class Sidebar {
     }
   }
 
-  addTaskToProject() {
-    const storage = new TodoStorage();
-    const taskForm = document.getElementById('task-form');
-    const task = this.taskFromForm();
-    const taskList = document.getElementById('task-list');
-    const taskStatus = storage.checkTaskStatus(task);
-
-    if (taskStatus.invalid) {
-      alert(taskStatus.message);
-    } else {
-      this.clearTaskFields();
-      taskForm.classList.toggle('closed');
-      storage.addTask(task);
-      taskList.append((new Task(task)).render());
-    }
-  }
-
   mainActions() {
     const addProject = DOMHelper.createElement(
       'button',
@@ -154,10 +128,12 @@ export default class Sidebar {
     removeProject.addEventListener('click', this.removeProjectHandler.bind(this));
     removeProject.textContent = 'Remove';
     addTask.innerHTML = 'Add a task';
+
     addTask.addEventListener(
       'click',
       tasksController.setModal.bind(tasksController, 'add')
     );
+
     box.append(addProject, removeProject, addTask);
 
     return box;

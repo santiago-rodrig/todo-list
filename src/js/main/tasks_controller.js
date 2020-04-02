@@ -82,6 +82,7 @@ export default class TasksController {
     let task;
 
     if (!dueDate && !dueTime) {
+      alert('No due date!');
       taskDueDate = 'No due date';
     } else if (!dueDate && dueTime) {
       taskDueDate = `Today ${moment(dueTime, 'HH:mm').format('h:mm a')}`;
@@ -91,7 +92,7 @@ export default class TasksController {
       taskDueDate = moment(`${dueDate}T${dueTime}`).format('MMM Do YYYY h:mm a');
     }
 
-    task = { title, description, priority, taskDueDate };
+    task = { title, description, priority, dueDate: taskDueDate };
 
     return task;
   }
@@ -115,7 +116,7 @@ export default class TasksController {
 
       modalButton.addEventListener(
         'click',
-        this.addTask.bind(this)
+        this.addTask.bind(this, modalForm)
       );
     } else {
       modalTitle.textContent = 'Editing a task';
@@ -132,43 +133,16 @@ export default class TasksController {
     }
   }
 
-  addTaskToProject(storage, buildTask) {
-    const task = buildTask();
+  addTask(form) {
+    const storage = new TodoStorage();
+    const task = this.setTaskFromForm(form); task.id = storage.nextId;
+
+    if (this.taskIsInvalid(storage, task, 'add')) return;
+
     const taskElement = (new Task(task)).render();
-    const taskList = document.getElementById('task-list');
+    const taskList = document.getElementById('tasks-list');
 
     taskList.append(taskElement);
     storage.addTask(task);
-  }
-
-  updateProjectTask(storage, buildTask, previousId) {
-    const taskElement = document.getElementById(previousId);
-    const task = buildTask();
-
-    console.log(buildTask);
-
-    const taskPriority = taskElement.querySelector(
-      'card-header > *:first-child',
-    );
-
-    const taskTitle = taskElement.querySelector(
-      'card-body card-title',
-    );
-
-    const taskDescription = taskElement.querySelector(
-      'card-body card-text',
-    );
-
-    const taskDueDate = taskElement.querySelector(
-      'card-footer > *:first-child',
-    );
-
-    taskPriority.textContent = task.priority;
-    taskTitle.textContent = task.title;
-    taskDescription.textContent = task.description;
-    taskDueDate.textContent = task.dueDate;
-    taskElement.id = task.id;
-    // update the storage here
-    storage.updateTask(previousId, task);
   }
 }

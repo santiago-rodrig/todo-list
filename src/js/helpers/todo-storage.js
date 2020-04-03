@@ -173,7 +173,7 @@ export default class TodoStorage {
   completeTask(taskId) {
     const { tasks } = this.getActiveProject();
 
-    tasks[task.id].completed = true;
+    tasks[taskId].completed = true;
 
     this.updateStorage();
   }

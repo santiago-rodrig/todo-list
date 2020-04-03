@@ -70,6 +70,7 @@ export default class Task {
         taskColumn.parentNode.removeChild(taskColumn);
       }
     }, 8);
+
     const storage = new TodoStorage();
     storage.completeTask(this.id);
   }

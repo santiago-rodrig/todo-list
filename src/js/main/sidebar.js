@@ -97,6 +97,19 @@ export default class Sidebar {
     }
   }
 
+  changeTasks() {
+    const tasksList = document.getElementById('tasks-list');
+    const tasksListContainer = tasksList.parentNode;
+
+    while (tasksListContainer.firstChild) {
+      tasksListContainer.removeChild(tasksListContainer.firstChild);
+    }
+
+    const tasks = (new Main()).tasks();
+
+    tasksListContainer.append(tasks);
+  }
+
   mainActions() {
     const addProject = DOMHelper.createElement(
       'button',

@@ -35,6 +35,7 @@ export default class TasksController {
   updateTask(form, task) {
     const storage = new TodoStorage();
     const taskObject = this.setTaskFromForm(form); taskObject.id = task.id;
+    const modalClose = document.querySelector('#tasks-modal .close');
 
     if (this.taskIsInvalid(storage, taskObject, 'edit')) return;
 
@@ -57,9 +58,11 @@ export default class TasksController {
     taskDescription.textContent = taskObject.description;
     taskDueDate.textContent = taskObject.dueDate;
     storage.updateTask(taskObject);
+    modalClose.click();
   }
 
   setTaskFromForm(form) {
+    const formElement = document.getElementById(`${form.prefix}-task-form`);
     const title = document.getElementById(`${form.prefix}-task-title`).value;
 
     const description = document.getElementById(
@@ -91,6 +94,7 @@ export default class TasksController {
       taskDueDate = moment(`${dueDate}T${dueTime}`).format('MMM Do YYYY h:mm a');
     }
 
+    formElement.parentNode.removeChild(formElement);
     task = { title, description, priority, dueDate: taskDueDate };
 
     return task;
@@ -105,27 +109,29 @@ export default class TasksController {
       '#tasks-modal .modal-footer button'
     );
 
+    const modalButtonClone = modalButton.cloneNode(true);
+
+    modalButton.parentNode.replaceChild(modalButtonClone, modalButton);
+
     if (action === 'add') {
       modalTitle.textContent = 'Adding a task';
-      DOMHelper.emptyElement(modalBody);
       modalForm = new Form('add', task);
       modalBody.append(modalForm.render());
-      modalButton.textContent = 'Add task';
-      modalButton.classList.add('btn-success');
+      modalButtonClone.textContent = 'Add task';
+      modalButtonClone.classList.add('btn-success');
 
-      modalButton.addEventListener(
+      modalButtonClone.addEventListener(
         'click',
         this.addTask.bind(this, modalForm)
       );
     } else {
       modalTitle.textContent = 'Editing a task';
-      DOMHelper.emptyElement(modalBody);
       modalForm = new Form('edit', task);
       modalBody.append(modalForm.render());
-      modalButton.textContent = 'Edit task';
-      modalButton.classList.add('btn-primary');
+      modalButtonClone.textContent = 'Edit task';
+      modalButtonClone.classList.add('btn-primary');
 
-      modalButton.addEventListener(
+      modalButtonClone.addEventListener(
         'click',
         this.updateTask.bind(this, modalForm, task)
       );
@@ -136,6 +142,10 @@ export default class TasksController {
     const storage = new TodoStorage();
     const task = this.setTaskFromForm(form); task.id = storage.nextId;
 
+    const modalClose = document.querySelector(
+      `.modal-header .close`
+    );
+
     if (this.taskIsInvalid(storage, task, 'add')) return;
 
     const taskElement = (new Task(task)).render();
@@ -143,5 +153,6 @@ export default class TasksController {
 
     taskList.append(taskElement);
     storage.addTask(task);
+    modalClose.click();
   }
 }

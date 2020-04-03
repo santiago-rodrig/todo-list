@@ -36,37 +36,38 @@ export default class Task {
   }
 
   deleteHandler() {
-    const task = document.getElementById(this.id);
+    const taskColumn = document.getElementById(`task-${this.id}`).parentNode;
 
     const fadeEffect = setInterval(() => {
-      if (!task.style.opacity) {
-        task.style.opacity = 1;
+      if (!taskColumn.style.opacity) {
+        taskColumn.style.opacity = 1;
       }
 
-      if (task.style.opacity > 0) {
-        task.style.opacity -= 0.05;
+      if (taskColumn.style.opacity > 0) {
+        taskColumn.style.opacity -= 0.05;
       } else {
         clearInterval(fadeEffect);
-        task.parentNode.removeChild(task);
+        taskColumn.parentNode.removeChild(taskColumn);
       }
     }, 8);
+
     const storage = new TodoStorage();
     storage.deleteTask(this.id);
   }
 
   completeHandler() {
-    const task = document.getElementById(this.id);
+    const taskColumn = document.getElementById(`task-${this.id}`).parentNode;
 
     const fadeEffect = setInterval(() => {
-      if (!task.style.opacity) {
-        task.style.opacity = 1;
+      if (!taskColumn.style.opacity) {
+        taskColumn.style.opacity = 1;
       }
 
-      if (task.style.opacity > 0) {
-        task.style.opacity -= 0.05;
+      if (taskColumn.style.opacity > 0) {
+        taskColumn.style.opacity -= 0.05;
       } else {
         clearInterval(fadeEffect);
-        task.parentNode.removeChild(task);
+        taskColumn.parentNode.removeChild(taskColumn);
       }
     }, 8);
     const storage = new TodoStorage();

@@ -30,3 +30,7 @@ h1, h2, h3 {
     opacity: 1;
   }
 }
+
+.unclickable:hover {
+  cursor: default;
+}

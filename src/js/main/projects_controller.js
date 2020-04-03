@@ -16,6 +16,8 @@ export default class ProjectsController {
   setActive(project, item) {
     const storage = new TodoStorage();
     const currentProject = document.getElementById('current-project');
+    const removeButton = document.getElementById('remove-project-btn');
+    const editButton = document.getElementById('edit-project-btn');
 
     if (item === currentProject) return;
 
@@ -25,6 +27,10 @@ export default class ProjectsController {
     item.id = 'current-project';
     item.classList.add('active');
     storage.changeToProject(project.id);
+    removeButton.disabled = project.title === 'Default';
+    editButton.disabled = removeButton.disabled;
+    removeButton.classList.toggle('unclickable');
+    editButton.classList.toggle('unclickable');
   }
 
   addProject() {
@@ -42,17 +48,16 @@ export default class ProjectsController {
       id: storage.nextId
     });
 
+    const projectElement = project.render();
     const projectStatus = storage.checkProjectStatus(project);
 
     if (projectStatus.invalid) {
       alert(projectStatus.message);
     } else {
       storage.addProject(project);
-      activeProject.id = undefined;
-      activeProject.removeAttribute('id');
-      activeProject.classList.remove('active');
-      projectsList.append(project.render());
+      projectsList.append(projectElement);
       this.setTasks();
+      this.setActive(project, projectElement);
     }
   }
 
@@ -65,12 +70,6 @@ export default class ProjectsController {
       'projects-list'
     ).firstChild;
 
-    if (project.title === 'Default') {
-      alert('You can\'t delete the Default project');
-
-      return;
-    }
-
     const userWantsToRemove = confirm(
       'Are you sure you want to delete the current project?'
     );
@@ -82,5 +81,28 @@ export default class ProjectsController {
       projectElement.parentNode.removeChild(projectElement);
       this.setTasks();
     }
+  }
+
+  editProject() {
+    const projectName = prompt('Please provide the new name of the project');
+
+    if (!projectName) return;
+
+    const storage = new TodoStorage();
+    const project = Object.assign({}, storage.getActiveProject());
+    const projectElement = document.getElementById('current-project');
+
+    project.title = projectName;
+
+    const projectStatus = storage.checkProjectStatus(project);
+
+    if (projectStatus.invalid) {
+      alert(projectStatus.message);
+
+      return;
+    }
+
+    storage.updateProject(project);
+    projectElement.textContent = projectName;
   }
 }

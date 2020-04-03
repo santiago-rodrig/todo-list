@@ -132,6 +132,11 @@ export default class TodoStorage {
     this.updateStorage();
   }
 
+  updateProject(project) {
+    this.projects[project.id] = project;
+    this.updateStorage();
+  }
+
   updateStorage() {
     const item = JSON.stringify(
       { projects: this.projects, nextId: this.nextId }

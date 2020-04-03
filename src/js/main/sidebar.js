@@ -23,6 +23,8 @@ export default class Sidebar {
   }
 
   mainActions() {
+    const storage = new TodoStorage();
+
     const addProject = DOMHelper.createElement(
       'button',
       ['btn-success', 'btn'],
@@ -32,12 +34,15 @@ export default class Sidebar {
     const removeProject = DOMHelper.createElement(
       'button',
       ['btn-danger', 'btn', 'ml-2'],
-      [{ prop: 'type', value: 'button' }],
+      [
+        { prop: 'type', value: 'button' },
+        { prop: 'id', value: 'remove-project-btn' }
+      ],
     );
 
     const addTask = DOMHelper.createElement(
       'button',
-      ['btn-light', 'btn', 'ml-2', 'rounded', 'border'],
+      ['btn-dark', 'btn', 'ml-2'],
       [
         { prop: 'type', value: 'button' },
         { prop: 'data-toggle', value: 'modal' },
@@ -45,11 +50,18 @@ export default class Sidebar {
       ]
     );
 
+    const editProject = DOMHelper.createElement(
+      'button',
+      ['btn', 'btn-dark', 'ml-2'],
+      [
+        { prop: 'type', value: 'button' },
+        { prop: 'id', value: 'edit-project-btn' }
+      ]
+    );
+
     const box = DOMHelper.createElement('div', ['mt-4']);
     const tasksController = new TasksController();
     const projectsController = new ProjectsController();
-
-    addProject.textContent = 'Add';
 
     addProject.addEventListener(
       'click',
@@ -61,15 +73,28 @@ export default class Sidebar {
       projectsController.removeProject.bind(projectsController)
     );
 
-    removeProject.textContent = 'Remove';
-    addTask.innerHTML = 'Add a task';
+    editProject.addEventListener(
+      'click',
+      projectsController.editProject.bind(projectsController)
+    );
 
     addTask.addEventListener(
       'click',
       tasksController.setModal.bind(tasksController, 'add')
     );
 
-    box.append(addProject, removeProject, addTask);
+    addProject.textContent = 'Add';
+    editProject.textContent = 'Edit';
+    addTask.innerHTML = 'Add a task';
+    removeProject.textContent = 'Remove';
+    box.append(addProject, editProject, addTask, removeProject);
+
+    if (storage.getActiveProject().title === 'Default') {
+      removeProject.disabled = true;
+      editProject.disabled = true;
+      removeProject.classList.toggle('unclickable');
+      editProject.classList.toggle('unclickable');
+    }
 
     return box;
   }

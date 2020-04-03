@@ -71,6 +71,12 @@ export default class TasksController {
 
     const taskElement = document.getElementById(`task-${taskObject.id}`);
 
+    const taskEditButton = taskElement.querySelector(
+      '.card-footer .task-action.text-light'
+    );
+
+    const taskEditButtonClone = taskEditButton.cloneNode(true);
+
     const taskPriority = taskElement.querySelector(
       '.card-header > *:first-child > *:first-child'
     );
@@ -82,6 +88,12 @@ export default class TasksController {
       '.card-footer > *:first-child > *:first-child'
     );
 
+    taskEditButtonClone.addEventListener(
+      'click',
+      this.setModal.bind(this, 'edit', taskObject)
+    );
+
+    taskEditButton.parentNode.replaceChild(taskEditButtonClone, taskEditButton);
     this.updateTaskBackground(taskElement, taskObject.priority);
     taskPriority.textContent = taskObject.priority;
     taskTitle.textContent = taskObject.title;
@@ -92,7 +104,6 @@ export default class TasksController {
   }
 
   setTaskFromForm(form) {
-    const formElement = document.getElementById(`${form.prefix}-task-form`);
     const title = document.getElementById(`${form.prefix}-task-title`).value;
 
     const description = document.getElementById(
@@ -124,7 +135,6 @@ export default class TasksController {
       taskDueDate = moment(`${dueDate}T${dueTime}`).format('MMM Do YYYY h:mm a');
     }
 
-    formElement.parentNode.removeChild(formElement);
     task = { title, description, priority, dueDate: taskDueDate };
 
     return task;
@@ -146,10 +156,9 @@ export default class TasksController {
     if (action === 'add') {
       modalTitle.textContent = 'Adding a task';
       modalForm = new Form('add', task);
-      DOMHelper.emptyElement(modalBody);
       modalBody.append(modalForm.render());
       modalButtonClone.textContent = 'Add task';
-      modalButtonClone.classList.remove('bg-primary'); // just in case
+      modalButtonClone.classList.remove('btn-primary');
       modalButtonClone.classList.add('btn-success');
 
       modalButtonClone.addEventListener(
@@ -162,7 +171,7 @@ export default class TasksController {
       DOMHelper.emptyElement(modalBody);
       modalBody.append(modalForm.render());
       modalButtonClone.textContent = 'Edit task';
-      modalButtonClone.classList.remove('bg-success'); // just in case
+      modalButtonClone.classList.remove('btn-success');
       modalButtonClone.classList.add('btn-primary');
 
       modalButtonClone.addEventListener(

@@ -56,7 +56,11 @@ export default class Sidebar {
       projectsController.addProject.bind(projectsController)
     );
 
-    // removeProject.addEventListener('click', projectsController.removeProject.bind(projecstController));
+    removeProject.addEventListener(
+      'click',
+      projectsController.removeProject.bind(projectsController)
+    );
+
     removeProject.textContent = 'Remove';
     addTask.innerHTML = 'Add a task';
 

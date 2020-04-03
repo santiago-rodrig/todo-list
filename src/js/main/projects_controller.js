@@ -55,4 +55,32 @@ export default class ProjectsController {
       this.setTasks();
     }
   }
+
+  removeProject() {
+    const storage = new TodoStorage();
+    const project = storage.getActiveProject();
+    const projectElement = document.getElementById('current-project');
+
+    const defaultProjectElement = document.getElementById(
+      'projects-list'
+    ).firstChild;
+
+    if (project.title === 'Default') {
+      alert('You can\'t delete the Default project');
+
+      return;
+    }
+
+    const userWantsToRemove = confirm(
+      'Are you sure you want to delete the current project?'
+    );
+
+    if (userWantsToRemove) {
+      storage.removeProject(project);
+      defaultProjectElement.id = 'current-project';
+      defaultProjectElement.classList.add('active');
+      projectElement.parentNode.removeChild(projectElement);
+      this.setTasks();
+    }
+  }
 }

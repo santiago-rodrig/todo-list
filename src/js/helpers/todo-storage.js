@@ -126,10 +126,9 @@ export default class TodoStorage {
     this.updateStorage();
   }
 
-  removeProject(projectName) {
-    const key = this.titleToCamelCase(projectName);
-    delete this.projects[key];
-    this.projects.default.active = true;
+  removeProject(project) {
+    delete this.projects[project.id];
+    this.projects['0'].active = true;
     this.updateStorage();
   }
 

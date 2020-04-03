@@ -128,7 +128,6 @@ export default class TodoStorage {
 
   removeProject(project) {
     delete this.projects[project.id];
-    this.projects['0'].active = true;
     this.updateStorage();
   }
 

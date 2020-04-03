@@ -29,8 +29,16 @@ export default class ProjectsController {
     storage.changeToProject(project.id);
     removeButton.disabled = project.title === 'Default';
     editButton.disabled = removeButton.disabled;
-    removeButton.classList.toggle('unclickable');
-    editButton.classList.toggle('unclickable');
+
+    if (project.title === 'Default') {
+      removeButton.classList.remove('unclickable');
+      removeButton.classList.add('unclickable');
+      editButton.classList.remove('unclickable');
+      editButton.classList.add('unclickable');
+    } else {
+      removeButton.classList.remove('unclickable');
+      editButton.classList.remove('unclickable');
+    }
   }
 
   addProject() {
@@ -65,6 +73,7 @@ export default class ProjectsController {
     const storage = new TodoStorage();
     const project = storage.getActiveProject();
     const projectElement = document.getElementById('current-project');
+    const defaultProject = storage.projects['0'];
 
     const defaultProjectElement = document.getElementById(
       'projects-list'
@@ -75,11 +84,10 @@ export default class ProjectsController {
     );
 
     if (userWantsToRemove) {
-      storage.removeProject(project);
-      defaultProjectElement.id = 'current-project';
-      defaultProjectElement.classList.add('active');
-      projectElement.parentNode.removeChild(projectElement);
+      this.setActive(defaultProject, defaultProjectElement);
       this.setTasks();
+      projectElement.parentNode.removeChild(projectElement);
+      storage.removeProject(project);
     }
   }
 

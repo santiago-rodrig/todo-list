@@ -92,8 +92,10 @@ export default class Sidebar {
     if (storage.getActiveProject().title === 'Default') {
       removeProject.disabled = true;
       editProject.disabled = true;
-      removeProject.classList.toggle('unclickable');
-      editProject.classList.toggle('unclickable');
+      removeProject.classList.remove('unclickable');
+      removeProject.classList.add('unclickable');
+      editProject.classList.remove('unclickable');
+      editProject.classList.add('unclickable');
     }
 
     return box;

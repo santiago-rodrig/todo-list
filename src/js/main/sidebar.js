@@ -4,110 +4,22 @@ import Main from './index';
 import Task from './task';
 import TasksController from './tasks_controller';
 import Form from './form';
+import Project from './project';
+import ProjectsController from './projects_controller';
 
 export default class Sidebar {
-  changeProject() {
-    const storage = new TodoStorage();
-    const currentProject = document.getElementById('current-project');
-
-    if (this === currentProject) return;
-
-    currentProject.id = undefined;
-    currentProject.removeAttribute('id');
-    currentProject.classList.remove('active');
-    this.id = 'current-project';
-    this.classList.add('active');
-    storage.changeToProject(this.textContent);
-  }
-
-  projectItem(project) {
-    const item = DOMHelper.createElement('li', ['list-group-item']);
-
-    item.textContent = project.title;
-
-    if (project.active) {
-      item.id = 'current-project';
-      item.classList.add('active');
-    }
-
-    item.addEventListener('click', this.changeProject);
-    item.addEventListener('click', this.changeTasks);
-
-    return item;
-  }
-
-  projectList() {
+  projectsList() {
     const storage = new TodoStorage();
     const list = DOMHelper.createElement('ul', ['list-group']);
-    const projectKeys = Object.keys(storage.projects);
+    const projects = Object.values(storage.projects);
 
-    projectKeys.forEach(key => {
-      list.append(this.projectItem(storage.projects[key]));
+    projects.forEach(p => {
+      list.append((new Project(p)).render());
     });
 
     list.id = 'projects-list';
 
     return list;
-  }
-
-  removeProjectHandler() {
-    const projectsList = document.getElementById('projects-list');
-    const activeProject = document.getElementById('current-project');
-    const storage = new TodoStorage();
-    let promptAction;
-
-    if (activeProject.textContent === 'Default') {
-      alert('You can\'t delete the default project');
-
-      return;
-    }
-
-    promptAction = confirm(
-      'Are you sure you want to delete this project?'
-    );
-
-    if (promptAction) {
-      storage.removeProject(activeProject.textContent);
-      projectsList.removeChild(activeProject);
-      projectsList.firstChild.id = 'current-project';
-      projectsList.firstChild.classList.add('active');
-      this.changeTasks();
-    }
-  }
-
-  addProjectHandler() {
-    const storage = new TodoStorage();
-    const projectName = prompt('Please provide the name of the project');
-    const projectsList = document.getElementById('projects-list');
-    const activeProject = document.getElementById('current-project');
-    const projectStatus = storage.checkProjectStatus(projectName);
-
-    if (!projectName) return;
-
-    if (projectStatus.invalid) {
-      alert(projectStatus.message);
-    } else {
-      // create the project in the local storage
-      storage.addProject(projectName);
-      // append the project to the projects list and set it to be active
-      activeProject.id = undefined;
-      activeProject.classList.remove('active');
-      projectsList.append(this.projectItem(storage.getActiveProject()));
-      this.changeTasks();
-    }
-  }
-
-  changeTasks() {
-    const tasksList = document.getElementById('tasks-list');
-    const tasksListContainer = tasksList.parentNode;
-
-    while (tasksListContainer.firstChild) {
-      tasksListContainer.removeChild(tasksListContainer.firstChild);
-    }
-
-    const tasks = (new Main()).tasks();
-
-    tasksListContainer.append(tasks);
   }
 
   mainActions() {
@@ -135,10 +47,16 @@ export default class Sidebar {
 
     const box = DOMHelper.createElement('div', ['mt-4']);
     const tasksController = new TasksController();
+    const projectsController = new ProjectsController();
 
     addProject.textContent = 'Add';
-    addProject.addEventListener('click', this.addProjectHandler.bind(this));
-    removeProject.addEventListener('click', this.removeProjectHandler.bind(this));
+
+    addProject.addEventListener(
+      'click',
+      projectsController.addProject.bind(projectsController)
+    );
+
+    // removeProject.addEventListener('click', projectsController.removeProject.bind(projecstController));
     removeProject.textContent = 'Remove';
     addTask.innerHTML = 'Add a task';
 
@@ -176,7 +94,7 @@ export default class Sidebar {
 
     column.append(
       this.heading(),
-      this.projectList(),
+      this.projectsList(),
       this.mainActions(),
     );
 

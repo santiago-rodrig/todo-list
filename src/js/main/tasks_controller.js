@@ -2,6 +2,7 @@ import moment from 'moment';
 import Task from './task';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
+import Main from './index';
 
 export default class TasksController {
   updateTaskBackground(taskElement, priority) {
@@ -18,6 +19,35 @@ export default class TasksController {
         taskElement.classList.add('bg-light');
         break;
     }
+  }
+
+  tasks() {
+    const storage = new TodoStorage();
+    const { tasks } = storage.getActiveProject();
+
+    const container = DOMHelper.createElement(
+      'div', ['col-12', 'col-md-6', 'col-lg-8']
+    );
+
+    const heading = (new Main()).heading();
+    let taskElement;
+
+    const taskList = DOMHelper.createElement(
+      'div', ['row', 'justify-content-even']
+    );
+
+    taskList.id = 'tasks-list';
+
+    Object.values(tasks).forEach(task => {
+      if (!task.completed) {
+        taskList.append((new Task(task)).render());
+      }
+    });
+
+    container.append(heading, taskList);
+    container.id = 'tasks-list-container';
+
+    return container;
   }
 
   taskIsInvalid(storage, task, action) {
@@ -52,7 +82,7 @@ export default class TasksController {
       '.card-footer > *:first-child > *:first-child'
     );
 
-    this.updateTaskBackground(taskElement, this.priority);
+    this.updateTaskBackground(taskElement, taskObject.priority);
     taskPriority.textContent = taskObject.priority;
     taskTitle.textContent = taskObject.title;
     taskDescription.textContent = taskObject.description;
@@ -116,8 +146,10 @@ export default class TasksController {
     if (action === 'add') {
       modalTitle.textContent = 'Adding a task';
       modalForm = new Form('add', task);
+      DOMHelper.emptyElement(modalBody);
       modalBody.append(modalForm.render());
       modalButtonClone.textContent = 'Add task';
+      modalButtonClone.classList.remove('bg-primary'); // just in case
       modalButtonClone.classList.add('btn-success');
 
       modalButtonClone.addEventListener(
@@ -127,8 +159,10 @@ export default class TasksController {
     } else {
       modalTitle.textContent = 'Editing a task';
       modalForm = new Form('edit', task);
+      DOMHelper.emptyElement(modalBody);
       modalBody.append(modalForm.render());
       modalButtonClone.textContent = 'Edit task';
+      modalButtonClone.classList.remove('bg-success'); // just in case
       modalButtonClone.classList.add('btn-primary');
 
       modalButtonClone.addEventListener(
@@ -140,11 +174,13 @@ export default class TasksController {
 
   addTask(form) {
     const storage = new TodoStorage();
-    const task = this.setTaskFromForm(form); task.id = storage.nextId;
+    const task = this.setTaskFromForm(form);
 
     const modalClose = document.querySelector(
       `.modal-header .close`
     );
+
+    task.id = storage.getActiveProject().nextId;
 
     if (this.taskIsInvalid(storage, task, 'add')) return;
 

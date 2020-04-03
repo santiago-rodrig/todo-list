@@ -1,6 +1,7 @@
 import { DOMHelper, TodoStorage } from '../helpers';
 import Task from './task';
 import Sidebar from './sidebar';
+import TasksController from './tasks_controller';
 
 export default class Main {
   heading() {
@@ -12,34 +13,9 @@ export default class Main {
     return h1;
   }
 
-  tasks() {
-    const storage = new TodoStorage();
-    const tasks = storage.getActiveProject().tasks;
-    const container = DOMHelper.createElement('div', ['col-12', 'col-md-6', 'col-lg-8']);
-    const heading = this.heading();
-    let taskElement;
-
-    const taskList = DOMHelper.createElement(
-      'div', ['row', 'justify-content-even']
-    );
-
-    taskList.id = 'tasks-list';
-
-    Object.values(tasks).forEach(task => {
-      if (!task.completed) {
-        taskList.append((new Task(task)).render());
-      }
-    });
-
-    container.append(heading, taskList);
-    container.id = 'tasks-container';
-
-    return container;
-  }
-
   render() {
     const main = DOMHelper.createElement('main');
-    const tasks = this.tasks();
+    const tasks = (new TasksController()).tasks();
     const sideBar = (new Sidebar()).render();
     const container = DOMHelper.createElement('div', ['container']);
     const row = DOMHelper.createElement('div', ['row']);

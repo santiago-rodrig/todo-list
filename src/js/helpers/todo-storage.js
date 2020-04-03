@@ -12,7 +12,7 @@ export default class TodoStorage {
       this.nextId = parsed.nextId;
     } else {
       this.projects = {
-        default: {
+        0: {
           title: 'Default',
           tasks: {
             0: {
@@ -40,28 +40,15 @@ export default class TodoStorage {
               complete: false,
             },
           },
+          nextId: 3,
           active: true,
+          id: 0
         },
       };
 
-      this.nextId = 3;
+      this.nextId = 1;
       this.updateStorage();
     }
-  }
-
-  checkProjectStatus(projectName) {
-    const key = this.titleToCamelCase(projectName);
-
-    if (!key) return { invalid: true, message: 'The project title is invalid'};
-
-    const projectStatus = { invalid: false };
-
-    if (this.projects[key]) {
-      projectStatus.invalid = true;
-      projectStatus.message = 'That project already exists';
-    }
-
-    return projectStatus;
   }
 
   checkTaskStatus(task, action) {
@@ -103,46 +90,38 @@ export default class TodoStorage {
     return taskStatus;
   }
 
-  titleToCamelCase(projectName) {
-    let camelCased = '';
-    let words = [];
-
-    projectName = projectName.trim().split(' ').map(e => {
-      return e.replace(/\W/gi, '').trim().toLowerCase();
-    });
-
-    words.push(projectName[0]);
-
-    for (let i = 1; i < projectName.length; i += 1) {
-      camelCased = projectName[i].split('').slice(1);
-      camelCased = projectName[i][0].toUpperCase() + camelCased.join('');
-      words.push(camelCased);
+  checkProjectStatus(project) {
+    if (!project.title.trim().replace(/\W/gi, '')) {
+      return { invalid: true, message: 'Invalid project title' };
     }
 
-    words = words.join('');
+    const projects = Object.values(this.projects);
+    const projectStatus = { invalid: false };
 
-    return words;
+    projects.some(p => {
+      if (p.title === project.title) {
+        projectStatus.invalid = true;
+
+        projectStatus.message = 'There is already a project with the same title';
+
+        return true;
+      }
+    });
+
+    return projectStatus;
   }
 
-  changeToProject(projectName) {
-    const key = this.titleToCamelCase(projectName);
-
+  changeToProject(projectId) {
     this.getActiveProject().active = false;
-    this.projects[key].active = true;
+    this.projects[projectId].active = true;
 
     this.updateStorage();
   }
 
-  addProject(projectName) {
-    const key = this.titleToCamelCase(projectName);
-
-    this.projects[key] = {
-      title: projectName,
-      tasks: {},
-      active: true,
-    };
-
+  addProject(project) {
     this.getActiveProject().active = false;
+    this.projects[project.id] = project;
+    this.nextId += 1;
 
     this.updateStorage();
   }
@@ -179,8 +158,10 @@ export default class TodoStorage {
   }
 
   addTask(task) {
-    this.getActiveProject().tasks[task.id] = task;
-    this.nextId += 1;
+    const project = this.getActiveProject();
+
+    project.tasks[task.id] = task;
+    project.nextId += 1;
 
     this.updateStorage();
   }

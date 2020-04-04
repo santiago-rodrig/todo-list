@@ -1,5 +1,4 @@
 import { DOMHelper } from '../../helpers';
-import Link from './links';
 
 export default class Navigation {
   constructor() {
@@ -9,33 +8,19 @@ export default class Navigation {
   }
 
   renderDropdown() {
-    const container = DOMHelper.createElement('li', ['nav-item', 'dropleft']);
+    const container = DOMHelper.createElement('li', ['nav-item']);
     const anchor = DOMHelper.createElement(
       'a',
-      ['nav-link', 'dropdown-toggle', 'text-dark'],
+      ['nav-link', 'text-dark'],
       [
-        { prop: 'data-toggle', value: 'dropdown' },
         { prop: 'href', value: '#' },
-        { prop: 'role', value: 'button' },
-        { prop: 'aria-haspopup', value: 'true' },
-        { prop: 'aria-expanded', value: 'false' },
+        { prop: 'data-toggle', value: 'modal' },
+        { prop: 'data-target', value: '#info-modal' },
       ],
     );
-    const menuContainer = DOMHelper.createElement('li', ['dropdown-menu']);
-    const icon = DOMHelper.createElement('i', ['fas', 'fa-cog']);
+    const icon = DOMHelper.createElement('i', ['fas', 'fa-info-circle']);
     anchor.append(icon);
-    container.append(anchor, this.loopNavLinks(menuContainer));
-    return container;
-  }
-
-  loopNavLinks(container) {
-    let link;
-
-    this.navList.forEach((navItem) => {
-      link = new Link(navItem);
-      container.appendChild(link.render());
-    });
-
+    container.append(anchor);
     return container;
   }
 

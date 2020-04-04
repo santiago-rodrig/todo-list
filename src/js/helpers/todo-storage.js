@@ -111,15 +111,14 @@ export default class TodoStorage {
     return projectStatus;
   }
 
-  changeToProject(projectId) {
+  changeToProject(project) {
     this.getActiveProject().active = false;
-    this.projects[projectId].active = true;
+    this.projects[project.id].active = true;
 
     this.updateStorage();
   }
 
   addProject(project) {
-    this.getActiveProject().active = false;
     this.projects[project.id] = project;
     this.nextId += 1;
 
@@ -177,12 +176,16 @@ export default class TodoStorage {
   }
 
   getActiveProject() {
-    const projectKeys = Object.keys(this.projects);
+    const projects = Object.values(this.projects);
+    let project;
 
-    for (let i = 0; i < projectKeys.length; i += 1) {
-      if (this.projects[projectKeys[i]].active) {
-        return this.projects[projectKeys[i]];
+    projects.some(p => {
+      if (p.active) {
+        project = p;
+        return true;
       }
-    }
+    });
+
+    return project;
   }
 }

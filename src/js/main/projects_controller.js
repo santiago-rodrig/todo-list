@@ -26,7 +26,7 @@ export default class ProjectsController {
     currentProject.classList.remove('active');
     item.id = 'current-project';
     item.classList.add('active');
-    storage.changeToProject(project.id);
+    storage.changeToProject(project);
     removeButton.disabled = project.title === 'Default';
     editButton.disabled = removeButton.disabled;
 
@@ -52,7 +52,7 @@ export default class ProjectsController {
     const project = new Project({
       title: projectName,
       tasks: {},
-      active: true,
+      active: false,
       id: storage.nextId
     });
 
@@ -63,9 +63,9 @@ export default class ProjectsController {
       alert(projectStatus.message);
     } else {
       storage.addProject(project);
-      projectsList.append(projectElement);
-      this.setTasks();
       this.setActive(project, projectElement);
+      this.setTasks();
+      projectsList.append(projectElement);
     }
   }
 
@@ -73,7 +73,7 @@ export default class ProjectsController {
     const storage = new TodoStorage();
     const project = storage.getActiveProject();
     const projectElement = document.getElementById('current-project');
-    const defaultProject = storage.projects['0'];
+    const defaultProject = storage.projects[0];
 
     const defaultProjectElement = document.getElementById(
       'projects-list'
@@ -86,8 +86,8 @@ export default class ProjectsController {
     if (userWantsToRemove) {
       this.setActive(defaultProject, defaultProjectElement);
       this.setTasks();
-      projectElement.parentNode.removeChild(projectElement);
       storage.removeProject(project);
+      projectElement.parentNode.removeChild(projectElement);
     }
   }
 

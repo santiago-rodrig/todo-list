@@ -75,6 +75,8 @@ export default class ProjectsController {
     const projectElement = document.getElementById('current-project');
     const defaultProject = storage.projects[0];
 
+    console.log(project);
+    console.log(defaultProject);
     const defaultProjectElement = document.getElementById(
       'projects-list'
     ).firstChild;
@@ -86,7 +88,7 @@ export default class ProjectsController {
     if (userWantsToRemove) {
       this.setActive(defaultProject, defaultProjectElement);
       this.setTasks();
-      storage.removeProject(project);
+      storage.update().removeProject(project);
       projectElement.parentNode.removeChild(projectElement);
     }
   }

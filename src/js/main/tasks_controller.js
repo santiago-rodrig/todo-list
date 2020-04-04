@@ -156,6 +156,7 @@ export default class TasksController {
     if (action === 'add') {
       modalTitle.textContent = 'Adding a task';
       modalForm = new Form('add', task);
+      DOMHelper.emptyElement(modalBody);
       modalBody.append(modalForm.render());
       modalButtonClone.textContent = 'Add task';
       modalButtonClone.classList.remove('btn-primary');

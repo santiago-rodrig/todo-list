@@ -26,9 +26,11 @@ export default class TasksController {
     const tasksContainerParent = tasksContainer.parentNode;
     const tasksController = new TasksController();
     const addTaskButton = document.getElementById('add-task-btn');
+    const storage = new TodoStorage();
 
     tasksContainerParent.removeChild(tasksContainer);
     tasksContainerParent.append(tasksController.tasks());
+    storage.swapTasksMode('pending');
     addTaskButton.disabled = false;
     addTaskButton.classList.remove('unclickable');
   }
@@ -38,9 +40,11 @@ export default class TasksController {
     const tasksContainerParent = tasksContainer.parentNode;
     const tasksController = new TasksController();
     const addTaskButton = document.getElementById('add-task-btn');
+    const storage = new TodoStorage();
 
     tasksContainerParent.removeChild(tasksContainer);
     tasksContainerParent.append(tasksController.tasks('completed'));
+    storage.swapTasksMode('completed');
     addTaskButton.disabled = true;
     addTaskButton.classList.add('unclickable');
   }

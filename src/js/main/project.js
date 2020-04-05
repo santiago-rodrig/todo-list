@@ -1,4 +1,4 @@
-import { DOMHelper, todoStorage } from '../helpers';
+import { DOMHelper, TodoStorage } from '../helpers';
 import Main from './index';
 import ProjectsController from './projects_controller';
 
@@ -14,6 +14,7 @@ export default class Project {
   render() {
     const item = DOMHelper.createElement('li', ['list-group-item']);
     const projectsController = new ProjectsController();
+    const storage = new TodoStorage();
 
     item.textContent = this.title;
 

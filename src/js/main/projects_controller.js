@@ -5,12 +5,19 @@ import TasksController from './tasks_controller';
 
 export default class ProjectsController {
   setTasks() {
-    const tasksListContainer = document.getElementById('tasks-list-container');
-    const containerParent = tasksListContainer.parentNode;
-    const tasks = (new TasksController()).tasks();
+    const storage = new TodoStorage();
 
-    containerParent.removeChild(tasksListContainer);
-    containerParent.append(tasks);
+    if (storage.tasksMode === 'pending') {
+      const pendingTasksRadio = document.getElementById('task-type-pending');
+
+      pendingTasksRadio.click();
+    } else {
+      const completedTasksRadio = document.getElementById(
+        'task-type-completed'
+      );
+
+      completedTasksRadio.click();
+    }
   }
 
   setActive(project, item) {
@@ -75,8 +82,6 @@ export default class ProjectsController {
     const projectElement = document.getElementById('current-project');
     const defaultProject = storage.projects[0];
 
-    console.log(project);
-    console.log(defaultProject);
     const defaultProjectElement = document.getElementById(
       'projects-list'
     ).firstChild;

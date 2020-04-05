@@ -10,6 +10,7 @@ export default class TodoStorage {
 
       this.projects = parsed.projects;
       this.nextId = parsed.nextId;
+      this.tasksMode = parsed.tasksMode;
     } else {
       this.projects = {
         0: {
@@ -47,8 +48,14 @@ export default class TodoStorage {
       };
 
       this.nextId = 1;
+      this.tasksMode = 'pending';
       this.updateStorage();
     }
+  }
+
+  swapTasksMode(mode) {
+    this.tasksMode = mode;
+    this.updateStorage();
   }
 
   checkTaskStatus(task, action) {
@@ -148,7 +155,7 @@ export default class TodoStorage {
 
   updateStorage() {
     const item = JSON.stringify(
-      { projects: this.projects, nextId: this.nextId }
+      { projects: this.projects, nextId: this.nextId, tasksMode: this.tasksMode }
     );
 
     console.log(item);

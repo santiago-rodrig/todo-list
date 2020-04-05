@@ -18,7 +18,7 @@ export default class TodoStorage {
             0: {
               title: 'Create a task!',
               description: 'You can create some tasks by clicking the + button.',
-              dueDate: moment().format('MMM Do YYYY HH:mm'),
+              dueDate: moment().format('MMM Do YYYY h:mm a'),
               priority: 'normal',
               id: '0',
               completed: false,
@@ -26,7 +26,7 @@ export default class TodoStorage {
             1: {
               title: 'Tasks have colors!',
               description: 'Tasks have different colors depending on the priority.',
-              dueDate: moment().format('MMM Do YYYY HH:mm'),
+              dueDate: moment().format('MMM Do YYYY h:mm a'),
               priority: 'important',
               id: '1',
               completed: false,
@@ -164,10 +164,11 @@ export default class TodoStorage {
     this.updateStorage();
   }
 
-  completeTask(taskId) {
+  completeTask(task) {
     const { tasks } = this.getActiveProject();
 
-    tasks[taskId].completed = true;
+    tasks[task.id].completed = true;
+    tasks[task.id].completeDate = moment().format('MMM Do YYYY h:mm a');
 
     this.updateStorage();
   }

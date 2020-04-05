@@ -21,12 +21,36 @@ export default class TasksController {
     }
   }
 
-  tasks() {
+  showPending() {
+    const tasksContainer = document.getElementById('tasks-list-container');
+    const tasksContainerParent = tasksContainer.parentNode;
+    const tasksController = new TasksController();
+    const addTaskButton = document.getElementById('add-task-btn');
+
+    tasksContainerParent.removeChild(tasksContainer);
+    tasksContainerParent.append(tasksController.tasks());
+    addTaskButton.disabled = false;
+    addTaskButton.classList.remove('unclickable');
+  }
+
+  showCompleted() {
+    const tasksContainer = document.getElementById('tasks-list-container');
+    const tasksContainerParent = tasksContainer.parentNode;
+    const tasksController = new TasksController();
+    const addTaskButton = document.getElementById('add-task-btn');
+
+    tasksContainerParent.removeChild(tasksContainer);
+    tasksContainerParent.append(tasksController.tasks('completed'));
+    addTaskButton.disabled = true;
+    addTaskButton.classList.add('unclickable');
+  }
+
+  tasks(type='pending') {
     const storage = new TodoStorage();
     const { tasks } = storage.getActiveProject();
 
     const container = DOMHelper.createElement(
-      'div', ['col-12', 'col-md-6', 'col-lg-8']
+      'div', ['col-12', 'col-md-6', 'col-lg-8', 'pt-5']
     );
 
     const heading = (new Main()).heading();
@@ -38,11 +62,19 @@ export default class TasksController {
 
     taskList.id = 'tasks-list';
 
-    Object.values(tasks).forEach(task => {
-      if (!task.completed) {
-        taskList.append((new Task(task)).render());
-      }
-    });
+    if (type === 'pending') {
+      Object.values(tasks).forEach(task => {
+        if (!task.completed) {
+          taskList.append((new Task(task)).render());
+        }
+      });
+    } else {
+      Object.values(tasks).forEach(task => {
+        if (task.completed) {
+          taskList.append((new Task(task)).render());
+        }
+      });
+    }
 
     container.append(heading, taskList);
     container.id = 'tasks-list-container';
@@ -64,7 +96,10 @@ export default class TasksController {
 
   updateTask(form, task) {
     const storage = new TodoStorage();
-    const taskObject = this.setTaskFromForm(form); taskObject.id = task.id;
+    const taskObject = this.setTaskFromForm(form);
+
+    taskObject = Object.assign(taskObject, task);
+
     const modalClose = document.querySelector('#tasks-modal .close');
 
     if (this.taskIsInvalid(storage, taskObject, 'edit')) return;
@@ -191,6 +226,7 @@ export default class TasksController {
     );
 
     task.id = storage.getActiveProject().nextId;
+    task.completed = false;
 
     if (this.taskIsInvalid(storage, task, 'add')) return;
 

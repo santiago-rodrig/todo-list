@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
 import TasksController from './tasks_controller';
@@ -9,6 +10,8 @@ export default class Task {
     this.dueDate = task.dueDate;
     this.priority = task.priority;
     this.id = task.id;
+    this.completed = task.completed;
+    this.completeDate = task.completeDate;
   }
 
   header() {
@@ -27,6 +30,7 @@ export default class Task {
     const priority = DOMHelper.createElement('div', ['text-light']);
 
     priority.textContent = this.priority;
+
     deleteAction.innerHTML = '<i class="fas fa-window-close"></i>';
     deleteAction.addEventListener('click', this.deleteHandler.bind(this));
     flexContainer.append(priority, deleteAction);
@@ -72,7 +76,7 @@ export default class Task {
     }, 8);
 
     const storage = new TodoStorage();
-    storage.completeTask(this.id);
+    storage.completeTask(this);
   }
 
   body() {
@@ -93,7 +97,8 @@ export default class Task {
     );
 
     const flexContainer = DOMHelper.createElement(
-      'div', ['d-flex', 'justify-content-between', 'bg-dark', 'p-2'],
+      'div',
+      ['d-flex', 'justify-content-between', 'bg-dark', 'p-2']
     );
 
     const completeAction = DOMHelper.createElement(
@@ -109,13 +114,23 @@ export default class Task {
       ],
     );
 
-    const actions = DOMHelper.createElement('div', ['d-flex']);
-    const dueDate = DOMHelper.createElement('div', ['text-light']);
+    const actions = DOMHelper.createElement('div', ['d-flex', 'align-self-end']);
+    const dueDate = DOMHelper.createElement('p', ['text-light']);
+    const completeDate = DOMHelper.createElement('p', ['text-light']);
+    const completeHeading = DOMHelper.createElement('h4', ['text-info']);
+    const dueDateHeading = DOMHelper.createElement('h4', ['text-info']);
+    const completeContainer = DOMHelper.createElement('div');
+    const dueDateContainer = DOMHelper.createElement('div');
     const tasksController = new TasksController();
 
     dueDate.textContent = this.dueDate;
+    completeDate.textContent = this.completeDate;
+    completeHeading.textContent = 'Completion date';
+    dueDateHeading.textContent = 'Due date';
     completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
     editAction.innerHTML = '<i class="fas fa-edit"></i>';
+    dueDateContainer.append(dueDateHeading, dueDate);
+    completeContainer.append(completeHeading, completeDate);
 
     editAction.addEventListener(
       'click',
@@ -124,7 +139,14 @@ export default class Task {
 
     completeAction.addEventListener('click', this.completeHandler.bind(this));
     actions.append(editAction, completeAction);
-    flexContainer.append(dueDate, actions);
+
+    if (!this.completed) {
+      flexContainer.append(dueDateContainer, actions);
+    } else {
+      flexContainer.classList.add('flex-column');
+      flexContainer.append(dueDateContainer, completeContainer);
+    }
+
     footer.append(flexContainer);
 
     return footer;

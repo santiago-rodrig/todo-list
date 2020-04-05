@@ -22,6 +22,78 @@ export default class Sidebar {
     return list;
   }
 
+  taskType(type='pending') {
+    const container = DOMHelper.createElement('div');
+    const heading = DOMHelper.createElement('h4', ['mt-4']);
+    const form = DOMHelper.createElement('form');
+    const formGroup = DOMHelper.createElement('div', ['form-group']);
+    const pendingCheck = DOMHelper.createElement('div', ['form-check']);
+    const tasksController = new TasksController();
+
+    const pendingCheckInput = DOMHelper.createElement(
+      'input',
+      ['form-check-input'],
+      [
+        { prop: 'type', value: 'radio' },
+        { prop: 'name', value: 'task_type' },
+        { prop: 'id', value: 'task-type-pending' },
+        { prop: 'value', value: 'pending' }
+      ]
+    );
+
+    const pendingCheckLabel = DOMHelper.createElement(
+      'label',
+      ['form-check-label'],
+      [
+        { prop: 'for', value: 'task-type-pending' }
+      ]
+    );
+
+    const completedCheck = DOMHelper.createElement('div', ['form-check']);
+
+    const completedCheckInput = DOMHelper.createElement(
+      'input',
+      ['form-check-input'],
+      [
+        { prop: 'type', value: 'radio' },
+        { prop: 'name', value: 'task_type' },
+        { prop: 'id', value: 'task-type-completed' },
+        { prop: 'value', value: 'completed' }
+      ]
+    );
+
+    const completedCheckLabel = DOMHelper.createElement(
+      'label',
+      ['form-check-label'],
+      [
+        { prop: 'form', value: 'task-type-completed' }
+      ]
+    );
+
+    pendingCheckLabel.textContent = 'Pending';
+    pendingCheck.append(pendingCheckInput, pendingCheckLabel);
+    pendingCheckInput.checked = true;
+
+    pendingCheckInput.addEventListener(
+      'click',
+      tasksController.showPending
+    );
+
+    completedCheckLabel.textContent = 'Completed';
+    completedCheck.append(completedCheckInput, completedCheckLabel);
+
+    completedCheckInput.addEventListener(
+      'click',
+      tasksController.showCompleted
+    );
+
+    form.append(pendingCheck, completedCheck);
+    heading.textContent = 'Tasks type'
+    container.append(heading, form);
+
+    return container;
+  }
+
   mainActions() {
     const storage = new TodoStorage();
 
@@ -46,7 +118,8 @@ export default class Sidebar {
       [
         { prop: 'type', value: 'button' },
         { prop: 'data-toggle', value: 'modal' },
-        { prop: 'data-target', value: '#tasks-modal' }
+        { prop: 'data-target', value: '#tasks-modal' },
+        { prop: 'id', value: 'add-task-btn' }
       ]
     );
 
@@ -127,6 +200,7 @@ export default class Sidebar {
       this.heading(),
       this.projectsList(),
       this.mainActions(),
+      this.taskType()
     );
 
     return column;

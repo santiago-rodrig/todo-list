@@ -5,7 +5,7 @@ tool to use when you want to focus on getting things done. Basic features
 of a TODO list are present, so you may use this project to create your
 own TODO list application and change it to your liking.
 
-![TODO list gif demo]()
+![TODO list gif demo](./doc/demo.gif)
 
 ## Features
 
@@ -20,7 +20,6 @@ own TODO list application and change it to your liking.
 - Projects addition
 - Projects deletion
 - Tasks mode switching
-- Peding tasks
 - Completed tasks
 - Tasks importance
 - Tasks due date
@@ -38,14 +37,14 @@ own TODO list application and change it to your liking.
 
 ### Requirements
 
-- **npm** or *yarn*
+- [node](https://nodejs.org/en/)
 
 ### Steps
 
 1. Clone the repo
 
 ```bash
-git clone https://github.com/santiago-rodrig/todo-list
+git clone https://github.com/santiago-rodrig/todo-list.git
 ```
 
 2. Get the dependencies

@@ -1,43 +1,36 @@
 import { DOMHelper } from '../helpers';
-import Navigation from './navigation';
+import InfoIcon from './info_icon';
 
 export default class Header {
-  renderJumboTron() {
+  jumboTron() {
     const jumbotron = DOMHelper.createElement('div', [
       'jumbotron',
       'jumbotron-fluid',
       'bg-transparent',
+      'text-center'
     ]);
-    const container = DOMHelper.createElement('div', [
-      'container',
-    ]);
-    const h1 = DOMHelper.createElement('h1', ['display-4', 'text-center']);
-    const p = DOMHelper.createElement('p', ['lead', 'text-center']);
+
+    const h1 = DOMHelper.createElement('h1');
+    const p = DOMHelper.createElement('p', ['lead']);
 
     h1.innerText = 'A handy TODO-List app';
     p.innerText = 'Use it to manage your day to day life with ease';
+    jumbotron.append(h1, p);
 
-    container.append(h1, p);
-    jumbotron.appendChild(container);
     return jumbotron;
   }
 
   render() {
-    const container = DOMHelper.createElement('header', [
-      'container-fluid',
-      'p-4',
-      'mb-5',
-    ]);
-    const row = DOMHelper.createElement('div', ['row', 'align-items-start']);
-    const placeHolderCol = DOMHelper.createElement('div', ['col-lg-4', 'col-md-0', 'col-sm-0']);
-    const jumboContainer = DOMHelper.createElement('div', ['col-lg-4', 'col-md-8', 'col-sm-8']);
-    const navContainer = DOMHelper.createElement('div', ['col-lg-4', 'col-md-4', 'col-sm-4']);
-    const navigation = new Navigation();
-    navContainer.appendChild(navigation.render());
-    jumboContainer.appendChild(this.renderJumboTron());
-    row.append(placeHolderCol, jumboContainer, navContainer);
+    const container = DOMHelper.createElement(
+      'header',
+      ['p-5', 'position-relative']
+    );
 
-    container.appendChild(row);
+    const jumbotron = this.jumboTron();
+    const infoIcon = new InfoIcon().render();
+
+    container.append(jumbotron, infoIcon);
+
     return container;
   }
 }

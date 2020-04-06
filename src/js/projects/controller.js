@@ -1,7 +1,5 @@
 import { TodoStorage } from '../helpers';
-import Project from './project';
-import Main from './index';
-import TasksController from './tasks_controller';
+import Project from './model';
 
 export default class ProjectsController {
   setTasks() {
@@ -13,7 +11,7 @@ export default class ProjectsController {
       pendingTasksRadio.click();
     } else {
       const completedTasksRadio = document.getElementById(
-        'task-type-completed'
+        'task-type-completed',
       );
 
       completedTasksRadio.click();
@@ -60,7 +58,7 @@ export default class ProjectsController {
       title: projectName,
       tasks: {},
       active: false,
-      id: storage.nextId
+      id: storage.nextId,
     });
 
     const projectElement = project.render();
@@ -83,11 +81,11 @@ export default class ProjectsController {
     const defaultProject = storage.projects[0];
 
     const defaultProjectElement = document.getElementById(
-      'projects-list'
+      'projects-list',
     ).firstChild;
 
     const userWantsToRemove = confirm(
-      'Are you sure you want to delete the current project?'
+      'Are you sure you want to delete the current project?',
     );
 
     if (userWantsToRemove) {
@@ -104,7 +102,7 @@ export default class ProjectsController {
     if (!projectName) return;
 
     const storage = new TodoStorage();
-    const project = Object.assign({}, storage.getActiveProject());
+    const project = { ...storage.getActiveProject() };
     const projectElement = document.getElementById('current-project');
 
     project.title = projectName;

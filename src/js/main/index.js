@@ -1,7 +1,7 @@
 import { DOMHelper, TodoStorage } from '../helpers';
-import Task from './task';
-import Sidebar from './sidebar';
-import TasksController from './tasks_controller';
+import Task from '../tasks/model';
+import Sidebar from '../sidebar';
+import TasksController from '../tasks/controller';
 
 export default class Main {
   heading() {

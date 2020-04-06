@@ -1,8 +1,8 @@
 import moment from 'moment';
-import Task from './task';
+import Task from './model';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
-import Main from './index';
+import Main from '../main';
 
 export default class TasksController {
   updateTaskBackground(taskElement, priority) {
@@ -49,19 +49,19 @@ export default class TasksController {
     addTaskButton.classList.add('unclickable');
   }
 
-  tasks(type='pending') {
+  tasks(type = 'pending') {
     const storage = new TodoStorage();
     const { tasks } = storage.getActiveProject();
 
     const container = DOMHelper.createElement(
-      'div', ['col-12', 'col-md-6', 'col-lg-8', 'pt-5']
+      'div', ['col-12', 'col-md-6', 'col-lg-8', 'pt-5'],
     );
 
     const heading = (new Main()).heading();
     let taskElement;
 
     const taskList = DOMHelper.createElement(
-      'div', ['row', 'justify-content-even']
+      'div', ['row', 'justify-content-even'],
     );
 
     taskList.id = 'tasks-list';
@@ -111,25 +111,25 @@ export default class TasksController {
     const taskElement = document.getElementById(`task-${taskObject.id}`);
 
     const taskEditButton = taskElement.querySelector(
-      '.card-footer .task-action.text-light'
+      '.card-footer .task-action.text-light',
     );
 
     const taskEditButtonClone = taskEditButton.cloneNode(true);
 
     const taskPriority = taskElement.querySelector(
-      '.card-header > *:first-child > *:first-child'
+      '.card-header > *:first-child > *:first-child',
     );
 
     const taskTitle = taskElement.querySelector('.card-title');
     const taskDescription = taskElement.querySelector('.card-text');
 
     const taskDueDate = taskElement.querySelector(
-      '.card-footer > *:first-child > *:first-child'
+      '.card-footer > *:first-child > *:first-child',
     );
 
     taskEditButtonClone.addEventListener(
       'click',
-      this.setModal.bind(this, 'edit', taskObject)
+      this.setModal.bind(this, 'edit', taskObject),
     );
 
     taskEditButton.parentNode.replaceChild(taskEditButtonClone, taskEditButton);
@@ -146,19 +146,19 @@ export default class TasksController {
     const title = document.getElementById(`${form.prefix}-task-title`).value;
 
     const description = document.getElementById(
-      `${form.prefix}-task-description`
+      `${form.prefix}-task-description`,
     ).value;
 
     const priority = document.getElementById(
-      `${form.prefix}-task-priority`
+      `${form.prefix}-task-priority`,
     ).value;
 
     const dueDate = document.getElementById(
-      `${form.prefix}-task-due-date`
+      `${form.prefix}-task-due-date`,
     ).value;
 
     const dueTime = document.getElementById(
-      `${form.prefix}-task-due-time`
+      `${form.prefix}-task-due-time`,
     ).value;
 
     let taskDueDate;
@@ -174,18 +174,20 @@ export default class TasksController {
       taskDueDate = moment(`${dueDate}T${dueTime}`).format('MMM Do YYYY h:mm a');
     }
 
-    task = { title, description, priority, dueDate: taskDueDate };
+    task = {
+      title, description, priority, dueDate: taskDueDate,
+    };
 
     return task;
   }
 
-  setModal(action, task={}) {
+  setModal(action, task = {}) {
     const modalTitle = document.querySelector('#tasks-modal .modal-title');
     const modalBody = document.querySelector('#tasks-modal .modal-body');
     let modalForm;
 
     const modalButton = document.querySelector(
-      '#tasks-modal .modal-footer button'
+      '#tasks-modal .modal-footer button',
     );
 
     const modalButtonClone = modalButton.cloneNode(true);
@@ -203,7 +205,7 @@ export default class TasksController {
 
       modalButtonClone.addEventListener(
         'click',
-        this.addTask.bind(this, modalForm)
+        this.addTask.bind(this, modalForm),
       );
     } else {
       modalTitle.textContent = 'Editing a task';
@@ -216,7 +218,7 @@ export default class TasksController {
 
       modalButtonClone.addEventListener(
         'click',
-        this.updateTask.bind(this, modalForm, task)
+        this.updateTask.bind(this, modalForm, task),
       );
     }
   }
@@ -226,7 +228,7 @@ export default class TasksController {
     const task = this.setTaskFromForm(form);
 
     const modalClose = document.querySelector(
-      `.modal-header .close`
+      '.modal-header .close',
     );
 
     task.id = storage.getActiveProject().nextId;

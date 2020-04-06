@@ -7,9 +7,8 @@ import '../scss/main.scss';
 import Header from './header';
 import Footer from './footer';
 import Main from './main';
-import Sidebar from './main/sidebar';
-import Modal from './main/modal';
-import InfoModal from './main/infoModal';
+import TasksModal from './tasks/modal';
+import InfoModal from './header/modal';
 import { DOMHelper } from './helpers';
 
 const header = new Header();
@@ -17,5 +16,5 @@ const footer = new Footer();
 const main = new Main();
 
 document.body.append(
-  header.render(), main.render(), footer.render(), Modal, InfoModal,
+  header.render(), main.render(), footer.render(), TasksModal, InfoModal,
 );

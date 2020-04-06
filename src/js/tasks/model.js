@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
-import TasksController from './tasks_controller';
+import TasksController from './controller';
 
 export default class Task {
   constructor(task) {
@@ -98,7 +98,7 @@ export default class Task {
 
     const flexContainer = DOMHelper.createElement(
       'div',
-      ['d-flex', 'justify-content-between', 'bg-dark', 'p-2']
+      ['d-flex', 'justify-content-between', 'bg-dark', 'p-2'],
     );
 
     const completeAction = DOMHelper.createElement(
@@ -134,7 +134,7 @@ export default class Task {
 
     editAction.addEventListener(
       'click',
-      tasksController.setModal.bind(tasksController, 'edit', this)
+      tasksController.setModal.bind(tasksController, 'edit', this),
     );
 
     completeAction.addEventListener('click', this.completeHandler.bind(this));

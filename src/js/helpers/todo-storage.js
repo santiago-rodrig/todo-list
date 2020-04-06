@@ -43,7 +43,7 @@ export default class TodoStorage {
           },
           nextId: 3,
           active: true,
-          id: 0
+          id: 0,
         },
       };
 
@@ -77,19 +77,17 @@ export default class TodoStorage {
 
           taskStatus.message = [
             'The current project already has a',
-            'task with the same title'
+            'task with the same title',
           ].join(' ');
         }
-      } else {
-        if (tasks[key].id !== task.id) {
-          if (tasks[key].title === task.title) {
-            taskStatus.invalid = true;
+      } else if (tasks[key].id !== task.id) {
+        if (tasks[key].title === task.title) {
+          taskStatus.invalid = true;
 
-            taskStatus.message = [
-              'The current project already has a',
-              'task with the same title'
-            ].join(' ');
-          }
+          taskStatus.message = [
+            'The current project already has a',
+            'task with the same title',
+          ].join(' ');
         }
       }
     }
@@ -155,7 +153,7 @@ export default class TodoStorage {
 
   updateStorage() {
     const item = JSON.stringify(
-      { projects: this.projects, nextId: this.nextId, tasksMode: this.tasksMode }
+      { projects: this.projects, nextId: this.nextId, tasksMode: this.tasksMode },
     );
 
     console.log(item);

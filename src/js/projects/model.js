@@ -1,6 +1,5 @@
 import { DOMHelper, TodoStorage } from '../helpers';
-import Main from './index';
-import ProjectsController from './projects_controller';
+import ProjectsController from './controller';
 
 export default class Project {
   constructor(project) {
@@ -25,7 +24,7 @@ export default class Project {
 
     item.addEventListener(
       'click',
-      projectsController.setActive.bind(projectsController, this, item)
+      projectsController.setActive.bind(projectsController, this, item),
     );
 
     item.addEventListener('click', projectsController.setTasks);

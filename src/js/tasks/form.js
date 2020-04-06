@@ -1,5 +1,4 @@
 import moment from 'moment';
-import TasksController from './tasks_controller';
 import { DOMHelper, TodoStorage } from '../helpers';
 
 export default class Form {
@@ -189,7 +188,7 @@ export default class Form {
       description,
       priority,
       dueDate,
-      dueTime
+      dueTime,
     );
 
     form.id = `${this.prefix}-task-form`;

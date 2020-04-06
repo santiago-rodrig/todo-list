@@ -38,8 +38,8 @@ export default (() => {
     'button',
     ['btn'],
     [
-      { prop: 'type', value: 'button' }
-    ]
+      { prop: 'type', value: 'button' },
+    ],
   );
 
   const closeButton = DOMHelper.createElement(

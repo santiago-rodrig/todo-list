@@ -3,9 +3,9 @@ import { DOMHelper } from '../helpers';
 export default class Footer {
   constructor() {
     this.linkIcons = {
-      'twitter': '<i class="fab fa-twitter"></i>',
-      'facebook': '<i class="fab fa-facebook-f"></i>',
-      'linkedIn': '<i class="fab fa-linkedin-in"></i>',
+      twitter: '<i class="fab fa-twitter"></i>',
+      facebook: '<i class="fab fa-facebook-f"></i>',
+      linkedIn: '<i class="fab fa-linkedin-in"></i>',
     };
   }
 
@@ -21,7 +21,7 @@ export default class Footer {
     const a = DOMHelper.createElement('a', [], [{ prop: 'href', value: '#' }]);
     const li = DOMHelper.createElement(
       'li',
-      ['list-group-item']
+      ['list-group-item'],
     );
 
     a.innerHTML = this.linkIcons[prop];
@@ -38,8 +38,8 @@ export default class Footer {
       ['list-group',
         'list-group-horizontal',
         'justify-content-center',
-        'mb-4'
-      ]
+        'mb-4',
+      ],
     );
 
     linkProps.forEach(prop => ul.appendChild(this.link(prop)));

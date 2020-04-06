@@ -1,11 +1,8 @@
 import moment from 'moment';
 import { DOMHelper, TodoStorage } from '../helpers';
-import Main from './index';
-import Task from './task';
-import TasksController from './tasks_controller';
-import Form from './form';
-import Project from './project';
-import ProjectsController from './projects_controller';
+import TasksController from '../tasks/controller';
+import ProjectsController from '../projects/controller';
+import Project from '../projects/model';
 
 export default class Sidebar {
   projectsList() {
@@ -22,7 +19,7 @@ export default class Sidebar {
     return list;
   }
 
-  taskType(type='pending') {
+  taskType(type = 'pending') {
     const container = DOMHelper.createElement('div');
     const heading = DOMHelper.createElement('h4', ['mt-4']);
     const form = DOMHelper.createElement('form');
@@ -37,16 +34,16 @@ export default class Sidebar {
         { prop: 'type', value: 'radio' },
         { prop: 'name', value: 'task_type' },
         { prop: 'id', value: 'task-type-pending' },
-        { prop: 'value', value: 'pending' }
-      ]
+        { prop: 'value', value: 'pending' },
+      ],
     );
 
     const pendingCheckLabel = DOMHelper.createElement(
       'label',
       ['form-check-label'],
       [
-        { prop: 'for', value: 'task-type-pending' }
-      ]
+        { prop: 'for', value: 'task-type-pending' },
+      ],
     );
 
     const completedCheck = DOMHelper.createElement('div', ['form-check']);
@@ -58,16 +55,16 @@ export default class Sidebar {
         { prop: 'type', value: 'radio' },
         { prop: 'name', value: 'task_type' },
         { prop: 'id', value: 'task-type-completed' },
-        { prop: 'value', value: 'completed' }
-      ]
+        { prop: 'value', value: 'completed' },
+      ],
     );
 
     const completedCheckLabel = DOMHelper.createElement(
       'label',
       ['form-check-label'],
       [
-        { prop: 'form', value: 'task-type-completed' }
-      ]
+        { prop: 'form', value: 'task-type-completed' },
+      ],
     );
 
     pendingCheckLabel.textContent = 'Pending';
@@ -76,7 +73,7 @@ export default class Sidebar {
 
     pendingCheckInput.addEventListener(
       'click',
-      tasksController.showPending
+      tasksController.showPending,
     );
 
     completedCheckLabel.textContent = 'Completed';
@@ -84,11 +81,11 @@ export default class Sidebar {
 
     completedCheckInput.addEventListener(
       'click',
-      tasksController.showCompleted
+      tasksController.showCompleted,
     );
 
     form.append(pendingCheck, completedCheck);
-    heading.textContent = 'Tasks type'
+    heading.textContent = 'Tasks type';
     container.append(heading, form);
 
     return container;
@@ -108,7 +105,7 @@ export default class Sidebar {
       ['btn-danger', 'btn', 'ml-2'],
       [
         { prop: 'type', value: 'button' },
-        { prop: 'id', value: 'remove-project-btn' }
+        { prop: 'id', value: 'remove-project-btn' },
       ],
     );
 
@@ -119,8 +116,8 @@ export default class Sidebar {
         { prop: 'type', value: 'button' },
         { prop: 'data-toggle', value: 'modal' },
         { prop: 'data-target', value: '#tasks-modal' },
-        { prop: 'id', value: 'add-task-btn' }
-      ]
+        { prop: 'id', value: 'add-task-btn' },
+      ],
     );
 
     const editProject = DOMHelper.createElement(
@@ -128,8 +125,8 @@ export default class Sidebar {
       ['btn', 'btn-dark', 'ml-2'],
       [
         { prop: 'type', value: 'button' },
-        { prop: 'id', value: 'edit-project-btn' }
-      ]
+        { prop: 'id', value: 'edit-project-btn' },
+      ],
     );
 
     const box = DOMHelper.createElement('div', ['mt-4']);
@@ -138,22 +135,22 @@ export default class Sidebar {
 
     addProject.addEventListener(
       'click',
-      projectsController.addProject.bind(projectsController)
+      projectsController.addProject.bind(projectsController),
     );
 
     removeProject.addEventListener(
       'click',
-      projectsController.removeProject.bind(projectsController)
+      projectsController.removeProject.bind(projectsController),
     );
 
     editProject.addEventListener(
       'click',
-      projectsController.editProject.bind(projectsController)
+      projectsController.editProject.bind(projectsController),
     );
 
     addTask.addEventListener(
       'click',
-      tasksController.setModal.bind(tasksController, 'add')
+      tasksController.setModal.bind(tasksController, 'add'),
     );
 
     addProject.textContent = 'Add';
@@ -200,7 +197,7 @@ export default class Sidebar {
       this.heading(),
       this.projectsList(),
       this.mainActions(),
-      this.taskType()
+      this.taskType(),
     );
 
     return column;

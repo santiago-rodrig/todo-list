@@ -9,6 +9,7 @@ export default class Main {
     const h1 = DOMHelper.createElement('h1', ['text-center', 'my-4']);
 
     h1.textContent = storage.getActiveProject().title;
+    h1.id = 'project-heading';
 
     return h1;
   }

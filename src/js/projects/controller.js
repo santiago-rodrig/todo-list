@@ -108,6 +108,7 @@ export default class ProjectsController {
     project.title = projectName;
 
     const projectStatus = storage.checkProjectStatus(project);
+    const projectHeading = document.getElementById('project-heading');
 
     if (projectStatus.invalid) {
       alert(projectStatus.message);
@@ -117,5 +118,6 @@ export default class ProjectsController {
 
     storage.updateProject(project);
     projectElement.textContent = projectName;
+    projectHeading.textContent = projectName;
   }
 }

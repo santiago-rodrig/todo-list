@@ -1,8 +1,7 @@
 import { DOMHelper } from '../helpers';
-import carousel from './carousel';
+import demo from '../../images/instructions/demo.gif';
 
 export default (() => {
-
   const modal = DOMHelper.createElement(
     'div',
     ['modal', 'fade'],
@@ -36,8 +35,6 @@ export default (() => {
     ],
   );
 
-  modalTitle.textContent = 'How to get started';
-
   const submitButton = DOMHelper.createElement(
     'button',
     ['btn'],
@@ -56,10 +53,15 @@ export default (() => {
     ],
   );
 
+  const instructions = new Image();
+
+  instructions.src = demo;
+  instructions.classList.add('w-100', 'd-block');
+  modalTitle.textContent = 'How to get started';
   closeButton.innerHTML = '&times;';
   modalHeader.append(modalTitle, closeButton);
   modalFooter.append(submitButton);
-  modalBody.appendChild(carousel);
+  modalBody.appendChild(instructions);
   modalContent.append(modalHeader, modalBody, modalFooter);
   modalDialog.append(modalContent);
   modal.append(modalDialog);

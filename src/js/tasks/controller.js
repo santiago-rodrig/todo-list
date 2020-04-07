@@ -1,4 +1,6 @@
+/* eslint-disable import/no-unresolved */
 import moment from 'moment';
+/* eslint-enable import/no-unresolved */
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
 import Task from './model';

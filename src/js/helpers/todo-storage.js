@@ -1,4 +1,6 @@
+/* eslint-disable import/no-unresolved */
 import moment from 'moment';
+/* eslint-enable import/no-unresolved */
 import SecretKey from './secret.key.txt';
 
 export default class TodoStorage {

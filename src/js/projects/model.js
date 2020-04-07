@@ -1,6 +1,3 @@
-import { DOMHelper, TodoStorage } from '../helpers';
-import ProjectsController from './controller';
-
 export default class Project {
   constructor(project) {
     this.title = project.title;
@@ -8,27 +5,5 @@ export default class Project {
     this.active = project.active;
     this.id = project.id;
     this.nextId = project.nextId ? project.nextId : 0;
-  }
-
-  render() {
-    const item = DOMHelper.createElement('li', ['list-group-item']);
-    const projectsController = new ProjectsController();
-    const storage = new TodoStorage();
-
-    item.textContent = this.title;
-
-    if (this.active) {
-      item.id = 'current-project';
-      item.classList.add('active');
-    }
-
-    item.addEventListener(
-      'click',
-      projectsController.setActive.bind(projectsController, this, item),
-    );
-
-    item.addEventListener('click', projectsController.setTasks);
-
-    return item;
   }
 }

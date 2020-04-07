@@ -2,7 +2,7 @@ import moment from 'moment';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
 import Task from './model';
-import Main from '../main';
+import ProjectsController from '../projects/controller';
 
 export default class TasksController {
   updateTaskBackground(taskElement, priority) {
@@ -224,8 +224,7 @@ export default class TasksController {
       'div', ['col-12', 'col-md-6', 'col-lg-8', 'pt-5'],
     );
 
-    const heading = (new Main()).heading();
-    let taskElement;
+    const heading = (new ProjectsController()).renderHeading();
 
     const taskList = DOMHelper.createElement(
       'div', ['row', 'justify-content-even'],
@@ -257,7 +256,9 @@ export default class TasksController {
     const taskStatus = storage.checkTaskStatus(task, action);
 
     if (taskStatus.invalid) {
+      /* eslint-disable no-alert */
       alert(taskStatus.message);
+      /* eslint-enable no-alert */
 
       return true;
     }
@@ -267,7 +268,7 @@ export default class TasksController {
 
   updateTask(form, task) {
     const storage = new TodoStorage();
-    const taskObject = this.setTaskFromForm(form);
+    let taskObject = this.setTaskFromForm(form);
 
     taskObject = Object.assign(taskObject, task);
 
@@ -329,7 +330,6 @@ export default class TasksController {
     ).value;
 
     let taskDueDate;
-    let task;
 
     if (!dueDate && !dueTime) {
       taskDueDate = 'No due date';
@@ -341,7 +341,7 @@ export default class TasksController {
       taskDueDate = moment(`${dueDate}T${dueTime}`).format('MMM Do YYYY h:mm a');
     }
 
-    task = {
+    const task = {
       title, description, priority, dueDate: taskDueDate,
     };
 

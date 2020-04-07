@@ -111,16 +111,16 @@ export default class TodoStorage {
 
         return true;
       }
+
+      return false;
     });
 
     return projectStatus;
   }
 
   changeToProject(project) {
-    console.log('BEFORE:', this.projects);
     this.getActiveProject().active = false;
     this.projects[project.id].active = true;
-    console.log('AFTER:', this.projects);
 
     this.updateStorage();
   }
@@ -155,8 +155,6 @@ export default class TodoStorage {
     const item = JSON.stringify(
       { projects: this.projects, nextId: this.nextId, tasksMode: this.tasksMode },
     );
-
-    console.log(item);
 
     localStorage.setItem(this.storageEntry, item);
   }
@@ -201,8 +199,11 @@ export default class TodoStorage {
     projects.some(p => {
       if (p.active) {
         project = p;
+
         return true;
       }
+
+      return false;
     });
 
     return project;

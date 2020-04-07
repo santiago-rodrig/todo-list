@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { DOMHelper, TodoStorage } from '../helpers';
+import { DOMHelper } from '../helpers';
 
 export default class Form {
   constructor(prefix, task) {

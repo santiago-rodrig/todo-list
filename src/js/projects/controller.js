@@ -2,6 +2,36 @@ import { TodoStorage, DOMHelper } from '../helpers';
 import Project from './model';
 
 export default class ProjectsController {
+  renderHeading() {
+    const storage = new TodoStorage();
+    const h1 = DOMHelper.createElement('h1', ['text-center', 'my-4']);
+
+    h1.textContent = storage.getActiveProject().title;
+    h1.id = 'project-heading';
+
+    return h1;
+  }
+
+  renderProject(project) {
+    const item = DOMHelper.createElement('li', ['list-group-item']);
+
+    item.textContent = project.title;
+
+    if (project.active) {
+      item.id = 'current-project';
+      item.classList.add('active');
+    }
+
+    item.addEventListener(
+      'click',
+      this.setActive.bind(this, project, item),
+    );
+
+    item.addEventListener('click', this.setTasks);
+
+    return item;
+  }
+
   setTasks() {
     const storage = new TodoStorage();
 
@@ -46,33 +76,11 @@ export default class ProjectsController {
     }
   }
 
-  renderProject(project) {
-    const item = DOMHelper.createElement('li', ['list-group-item']);
-    const projectsController = new ProjectsController();
-    const storage = new TodoStorage();
-
-    item.textContent = project.title;
-
-    if (project.active) {
-      item.id = 'current-project';
-      item.classList.add('active');
-    }
-
-    item.addEventListener(
-      'click',
-      projectsController.setActive.bind(projectsController, project, item),
-    );
-
-    item.addEventListener('click', this.setTasks);
-
-    return item;
-  }
-
   addProject() {
     const storage = new TodoStorage();
+    /* eslint-disable no-alert */
     const projectName = prompt('Please provide the name of the project');
     const projectsList = document.getElementById('projects-list');
-    const activeProject = document.getElementById('current-project');
 
     if (!projectName) return;
 
@@ -106,9 +114,11 @@ export default class ProjectsController {
       'projects-list',
     ).firstChild;
 
+    /* eslint-disable no-restricted-globals */
     const userWantsToRemove = confirm(
       'Are you sure you want to delete the current project?',
     );
+    /* eslint-enable no-restricted-globals */
 
     if (userWantsToRemove) {
       this.setActive(defaultProject, defaultProjectElement);
@@ -134,6 +144,7 @@ export default class ProjectsController {
 
     if (projectStatus.invalid) {
       alert(projectStatus.message);
+      /* eslint-enable no-alert */
 
       return;
     }

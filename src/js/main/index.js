@@ -1,18 +1,8 @@
-import { DOMHelper, TodoStorage } from '../helpers';
+import { DOMHelper } from '../helpers';
 import Sidebar from '../sidebar';
 import TasksController from '../tasks/controller';
 
 export default class Main {
-  heading() {
-    const storage = new TodoStorage();
-    const h1 = DOMHelper.createElement('h1', ['text-center', 'my-4']);
-
-    h1.textContent = storage.getActiveProject().title;
-    h1.id = 'project-heading';
-
-    return h1;
-  }
-
   render() {
     const main = DOMHelper.createElement('main');
     const tasks = (new TasksController()).renderTasksList();

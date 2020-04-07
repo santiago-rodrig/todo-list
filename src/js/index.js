@@ -9,7 +9,6 @@ import Footer from './footer';
 import Main from './main';
 import TasksModal from './tasks/modal';
 import InfoModal from './header/modal';
-import { DOMHelper } from './helpers';
 
 const header = new Header();
 const footer = new Footer();

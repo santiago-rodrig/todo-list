@@ -17,7 +17,7 @@ export default class Sidebar {
     return list;
   }
 
-  taskType(type = 'pending') {
+  taskType() {
     const container = DOMHelper.createElement('div');
     const heading = DOMHelper.createElement('h4', ['mt-4']);
     const form = DOMHelper.createElement('form');
@@ -82,7 +82,8 @@ export default class Sidebar {
       tasksController.showCompleted.bind(tasksController),
     );
 
-    form.append(pendingCheck, completedCheck);
+    formGroup.append(pendingCheck, completedCheck);
+    form.append(formGroup);
     heading.textContent = 'Tasks type';
     container.append(heading, form);
 

@@ -2,14 +2,14 @@ import { DOMHelper, TodoStorage } from '../helpers';
 import TasksController from '../tasks/controller';
 import ProjectsController from '../projects/controller';
 
-export default class Sidebar {
-  projectsList() {
+export default (() => {
+  function projectsList() {
     const storage = new TodoStorage();
     const list = DOMHelper.createElement('ul', ['list-group']);
     const projects = Object.values(storage.projects);
 
     projects.forEach(p => {
-      list.append((new ProjectsController()).renderProject(p));
+      list.append(ProjectsController.renderProject(p));
     });
 
     list.id = 'projects-list';
@@ -17,7 +17,7 @@ export default class Sidebar {
     return list;
   }
 
-  taskType() {
+  function taskType() {
     const container = DOMHelper.createElement('div');
     const heading = DOMHelper.createElement('h4', ['mt-4']);
     const form = DOMHelper.createElement('form');
@@ -90,7 +90,7 @@ export default class Sidebar {
     return container;
   }
 
-  mainActions() {
+  function mainActions() {
     const storage = new TodoStorage();
 
     const addProject = DOMHelper.createElement(
@@ -130,21 +130,20 @@ export default class Sidebar {
 
     const box = DOMHelper.createElement('div', ['mt-4']);
     const tasksController = new TasksController();
-    const projectsController = new ProjectsController();
 
     addProject.addEventListener(
       'click',
-      projectsController.addProject.bind(projectsController),
+      ProjectsController.addProject.bind(ProjectsController),
     );
 
     removeProject.addEventListener(
       'click',
-      projectsController.removeProject.bind(projectsController),
+      ProjectsController.removeProject.bind(ProjectsController),
     );
 
     editProject.addEventListener(
       'click',
-      projectsController.editProject.bind(projectsController),
+      ProjectsController.editProject.bind(ProjectsController),
     );
 
     addTask.addEventListener(
@@ -170,7 +169,7 @@ export default class Sidebar {
     return box;
   }
 
-  heading() {
+  function heading() {
     const heading = DOMHelper.createElement('h2', ['mb-4']);
 
     heading.textContent = 'Projects';
@@ -178,27 +177,25 @@ export default class Sidebar {
     return heading;
   }
 
-  render() {
-    const column = DOMHelper.createElement(
-      'div',
-      [
-        'col-12',
-        'col-md-6',
-        'col-lg-4',
-        'border',
-        'shadow',
-        'align-self-start',
-        'p-4',
-      ],
-    );
+  const column = DOMHelper.createElement(
+    'div',
+    [
+      'col-12',
+      'col-md-6',
+      'col-lg-4',
+      'border',
+      'shadow',
+      'align-self-start',
+      'p-4',
+    ],
+  );
 
-    column.append(
-      this.heading(),
-      this.projectsList(),
-      this.mainActions(),
-      this.taskType(),
-    );
+  column.append(
+    heading(),
+    projectsList(),
+    mainActions(),
+    taskType(),
+  );
 
-    return column;
-  }
-}
+  return column;
+})();

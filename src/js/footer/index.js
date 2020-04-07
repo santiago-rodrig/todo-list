@@ -1,15 +1,13 @@
 import { DOMHelper } from '../helpers';
 
-export default class Footer {
-  constructor() {
-    this.linkIcons = {
-      twitter: '<i class="fab fa-twitter"></i>',
-      facebook: '<i class="fab fa-facebook-f"></i>',
-      linkedIn: '<i class="fab fa-linkedin-in"></i>',
-    };
-  }
+export default (() => {
+  const linkIcons = {
+    twitter: '<i class="fab fa-twitter"></i>',
+    facebook: '<i class="fab fa-facebook-f"></i>',
+    linkedIn: '<i class="fab fa-linkedin-in"></i>',
+  };
 
-  copyRight() {
+  function copyRight() {
     const p = DOMHelper.createElement('p', ['text-center', 'text-light']);
 
     p.innerHTML = '&copy; Sharmarke Ahmed and Santiago Rodríguez';
@@ -17,21 +15,21 @@ export default class Footer {
     return p;
   }
 
-  link(prop) {
+  function link(prop) {
     const a = DOMHelper.createElement('a', [], [{ prop: 'href', value: '#' }]);
     const li = DOMHelper.createElement(
       'li',
       ['list-group-item'],
     );
 
-    a.innerHTML = this.linkIcons[prop];
+    a.innerHTML = linkIcons[prop];
     li.appendChild(a);
 
     return li;
   }
 
-  links() {
-    const linkProps = Object.keys(this.linkIcons);
+  function links() {
+    const linkProps = Object.keys(linkIcons);
 
     const ul = DOMHelper.createElement(
       'ul',
@@ -42,12 +40,12 @@ export default class Footer {
       ],
     );
 
-    linkProps.forEach(prop => ul.appendChild(this.link(prop)));
+    linkProps.forEach(prop => ul.appendChild(link(prop)));
 
     return ul;
   }
 
-  footer() {
+  function footer() {
     const footer = DOMHelper.createElement('footer', ['bg-dark', 'py-5']);
 
     footer.id = 'main-footer';
@@ -55,13 +53,11 @@ export default class Footer {
     return footer;
   }
 
-  render() {
-    const footer = this.footer();
-    const links = this.links();
-    const copyRight = this.copyRight();
+  const footerElement = footer();
+  const linksElement = links();
+  const copyRightElement = copyRight();
 
-    footer.append(links, copyRight);
+  footerElement.append(linksElement, copyRightElement);
 
-    return footer;
-  }
-}
+  return footerElement;
+})();

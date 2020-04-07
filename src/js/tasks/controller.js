@@ -8,18 +8,18 @@ import Task from './model';
 import ProjectsController from '../projects/controller';
 
 export default class TasksController {
-  updateTaskBackground(taskElement, priority) {
-    taskElement.classList.remove('bg-light', 'bg-danger', 'bg-secondary');
+  updateTaskBackground(priority) {
+    this.classList.remove('bg-light', 'bg-danger', 'bg-secondary');
 
     switch (priority) {
       case 'optional':
-        taskElement.classList.add('bg-secondary');
+        this.classList.add('bg-secondary');
         break;
       case 'important':
-        taskElement.classList.add('bg-danger');
+        this.classList.add('bg-danger');
         break;
       default:
-        taskElement.classList.add('bg-light');
+        this.classList.add('bg-light');
         break;
     }
   }
@@ -75,13 +75,13 @@ export default class TasksController {
     return header;
   }
 
-  taskBody(task) {
+  taskBody() {
     const body = DOMHelper.createElement('div', ['card-body']);
     const title = DOMHelper.createElement('h3', ['card-title']);
     const text = DOMHelper.createElement('p', ['card-text']);
 
-    title.textContent = task.title;
-    text.textContent = task.description;
+    title.textContent = this.title;
+    text.textContent = this.description;
     body.append(title, text);
 
     return body;
@@ -107,7 +107,7 @@ export default class TasksController {
     }
 
     const taskHeader = this.taskHeader(task);
-    const taskBody = this.taskBody(task);
+    const taskBody = this.taskBody.call(task);
     const taskFooter = this.taskFooter(task);
 
     taskElement.append(taskHeader, taskBody, taskFooter);
@@ -227,7 +227,7 @@ export default class TasksController {
       'div', ['col-12', 'col-md-6', 'col-lg-8', 'pt-5'],
     );
 
-    const heading = (new ProjectsController()).renderHeading();
+    const heading = ProjectsController.renderHeading();
 
     const taskList = DOMHelper.createElement(
       'div', ['row', 'justify-content-even'],
@@ -255,8 +255,8 @@ export default class TasksController {
     return container;
   }
 
-  taskIsInvalid(storage, task, action) {
-    const taskStatus = storage.checkTaskStatus(task, action);
+  taskIsInvalid(task, action) {
+    const taskStatus = this.checkTaskStatus(task, action);
 
     if (taskStatus.invalid) {
       alertify.alert(taskStatus.message, () => {
@@ -271,13 +271,13 @@ export default class TasksController {
 
   updateTask(form, task) {
     const storage = new TodoStorage();
-    let taskObject = this.setTaskFromForm(form);
+    let taskObject = this.setTaskFromForm().bind(form);
 
     taskObject = Object.assign(taskObject, task);
 
     const modalClose = document.querySelector('#tasks-modal .close');
 
-    if (this.taskIsInvalid(storage, taskObject, 'edit')) return;
+    if (this.taskIsInvalid(taskObject, 'edit').bind(storage)) return;
 
     const taskElement = document.getElementById(`task-${taskObject.id}`);
 
@@ -304,7 +304,7 @@ export default class TasksController {
     );
 
     taskEditButton.parentNode.replaceChild(taskEditButtonClone, taskEditButton);
-    this.updateTaskBackground(taskElement, taskObject.priority);
+    this.updateTaskBackground(taskObject.priority).bind(taskElement);
     taskPriority.textContent = taskObject.priority;
     taskTitle.textContent = taskObject.title;
     taskDescription.textContent = taskObject.description;
@@ -313,23 +313,23 @@ export default class TasksController {
     modalClose.click();
   }
 
-  setTaskFromForm(form) {
-    const title = document.getElementById(`${form.prefix}-task-title`).value;
+  setTaskFromForm() {
+    const title = document.getElementById(`${this.prefix}-task-title`).value;
 
     const description = document.getElementById(
-      `${form.prefix}-task-description`,
+      `${this.prefix}-task-description`,
     ).value;
 
     const priority = document.getElementById(
-      `${form.prefix}-task-priority`,
+      `${this.prefix}-task-priority`,
     ).value;
 
     const dueDate = document.getElementById(
-      `${form.prefix}-task-due-date`,
+      `${this.prefix}-task-due-date`,
     ).value;
 
     const dueTime = document.getElementById(
-      `${form.prefix}-task-due-time`,
+      `${this.prefix}-task-due-time`,
     ).value;
 
     let taskDueDate;
@@ -395,7 +395,7 @@ export default class TasksController {
 
   addTask(form) {
     const storage = new TodoStorage();
-    const task = this.setTaskFromForm(form);
+    const task = this.setTaskFromForm().bind(form);
 
     const modalClose = document.querySelector(
       '.modal-header .close',
@@ -404,7 +404,7 @@ export default class TasksController {
     task.id = storage.getActiveProject().nextId;
     task.completed = false;
 
-    if (this.taskIsInvalid(storage, task, 'add')) return;
+    if (this.taskIsInvalid(task, 'add').bind(storage)) return;
 
     const taskElement = this.renderTask(new Task(task));
     const taskList = document.getElementById('tasks-list');

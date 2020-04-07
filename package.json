@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/santiago-rodrig/todo-list#readme",
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
     "autoprefixer": "^9.7.5",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",
@@ -50,6 +49,7 @@
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "popper.js": "^1.16.1",
-    "sharp": "^0.25.2"
+    "sharp": "^0.25.2",
+    "@fortawesome/fontawesome-free": "^5.13.0"
   }
 }

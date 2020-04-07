@@ -2,8 +2,8 @@ import alertify from 'alertifyjs/build/alertify';
 import { TodoStorage, DOMHelper } from '../helpers';
 import Project from './model';
 
-export default class ProjectsController {
-  renderHeading() {
+export default (() => {
+  function renderHeading() {
     const storage = new TodoStorage();
     const h1 = DOMHelper.createElement('h1', ['text-center', 'my-4']);
 
@@ -13,7 +13,7 @@ export default class ProjectsController {
     return h1;
   }
 
-  renderProject(project) {
+  function renderProject(project) {
     const item = DOMHelper.createElement('li', ['list-group-item']);
 
     item.textContent = project.title;
@@ -33,7 +33,7 @@ export default class ProjectsController {
     return item;
   }
 
-  setTasks() {
+  function setTasks() {
     const storage = new TodoStorage();
 
     if (storage.tasksMode === 'pending') {
@@ -49,7 +49,7 @@ export default class ProjectsController {
     }
   }
 
-  setActive(project, item) {
+  function setActive(project, item) {
     const storage = new TodoStorage();
     const currentProject = document.getElementById('current-project');
     const removeButton = document.getElementById('remove-project-btn');
@@ -77,7 +77,7 @@ export default class ProjectsController {
     }
   }
 
-  addProject() {
+  function addProject() {
     alertify.prompt(
       '<h4>New project</h4>',
       '<p>Please provide the name of the project</p>',
@@ -116,7 +116,7 @@ export default class ProjectsController {
     );
   }
 
-  removeProject() {
+  function removeProject() {
     const storage = new TodoStorage();
     const project = storage.getActiveProject();
     const projectElement = document.getElementById('current-project');
@@ -143,7 +143,7 @@ export default class ProjectsController {
     );
   }
 
-  editProject() {
+  function editProject() {
     const storage = new TodoStorage();
     const project = { ...storage.getActiveProject() };
 
@@ -178,4 +178,14 @@ export default class ProjectsController {
       },
     );
   }
-}
+
+  return {
+    editProject,
+    removeProject,
+    addProject,
+    setActive,
+    setTasks,
+    renderProject,
+    renderHeading,
+  };
+})();

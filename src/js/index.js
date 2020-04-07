@@ -7,16 +7,12 @@ import 'alertifyjs/build/css/alertify.min.css';
 /* eslint-enable import/no-unresolved */
 
 import '../scss/main.scss';
-import Header from './header';
-import Footer from './footer';
-import Main from './main';
-import TasksModal from './tasks/modal';
-import InfoModal from './header/modal';
-
-const header = new Header();
-const footer = new Footer();
-const main = new Main();
+import header from './header';
+import footer from './footer';
+import main from './main';
+import tasksModal from './tasks/modal';
+import infoModal from './header/modal';
 
 document.body.append(
-  header.render(), main.render(), footer.render(), TasksModal, InfoModal,
+  header, main, footer, tasksModal, infoModal,
 );

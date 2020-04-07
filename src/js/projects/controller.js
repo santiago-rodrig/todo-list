@@ -1,4 +1,6 @@
+/* eslint-disable import/no-unresolved */
 import alertify from 'alertifyjs/build/alertify';
+/* eslint-enable import/no-unresolved */
 import { TodoStorage, DOMHelper } from '../helpers';
 import Project from './model';
 

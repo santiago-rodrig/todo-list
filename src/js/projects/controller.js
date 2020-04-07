@@ -1,3 +1,4 @@
+import alertify from 'alertifyjs/build/alertify';
 import { TodoStorage, DOMHelper } from '../helpers';
 import Project from './model';
 
@@ -77,31 +78,42 @@ export default class ProjectsController {
   }
 
   addProject() {
-    const storage = new TodoStorage();
-    /* eslint-disable no-alert */
-    const projectName = prompt('Please provide the name of the project');
-    const projectsList = document.getElementById('projects-list');
+    alertify.prompt(
+      '<h4>New project</h4>',
+      '<p>Please provide the name of the project</p>',
+      '',
+      (evt, value) => {
+        alertify.success(`OK: ${value}`);
 
-    if (!projectName) return;
+        const storage = new TodoStorage();
+        const projectsList = document.getElementById('projects-list');
 
-    const project = new Project({
-      title: projectName,
-      tasks: {},
-      active: false,
-      id: storage.nextId,
-    });
+        const project = new Project({
+          title: value,
+          id: storage.nextId,
+          tasks: {},
+          active: false,
+          nextId: 0,
+        });
 
-    const projectElement = this.renderProject(project);
-    const projectStatus = storage.checkProjectStatus(project);
+        const projectElement = this.renderProject(project);
+        const projectStatus = storage.checkProjectStatus(project);
 
-    if (projectStatus.invalid) {
-      alert(projectStatus.message);
-    } else {
-      storage.addProject(project);
-      this.setActive(project, projectElement);
-      this.setTasks();
-      projectsList.append(projectElement);
-    }
+        if (projectStatus.invalid) {
+          alertify.alert(projectStatus.message, () => {
+            alertify.message('OK');
+          });
+        } else {
+          storage.addProject(project);
+          this.setActive(project, projectElement);
+          this.setTasks();
+          projectsList.append(projectElement);
+        }
+      },
+      () => {
+        alertify.error('Cancel');
+      },
+    );
   }
 
   removeProject() {
@@ -114,43 +126,56 @@ export default class ProjectsController {
       'projects-list',
     ).firstChild;
 
-    /* eslint-disable no-restricted-globals */
-    const userWantsToRemove = confirm(
-      'Are you sure you want to delete the current project?',
-    );
-    /* eslint-enable no-restricted-globals */
+    alertify.confirm(
+      '<h4>Are you sure?</h4>',
+      `<p>All tasks of the ${project.title} project are going to be deleted.</p>`,
+      () => {
+        alertify.success('OK');
 
-    if (userWantsToRemove) {
-      this.setActive(defaultProject, defaultProjectElement);
-      this.setTasks();
-      storage.update().removeProject(project);
-      projectElement.parentNode.removeChild(projectElement);
-    }
+        this.setActive(defaultProject, defaultProjectElement);
+        this.setTasks();
+        storage.update().removeProject(project);
+        projectElement.parentNode.removeChild(projectElement);
+      },
+      () => {
+        alertify.error('Cancel');
+      },
+    );
   }
 
   editProject() {
-    const projectName = prompt('Please provide the new name of the project');
-
-    if (!projectName) return;
-
     const storage = new TodoStorage();
     const project = { ...storage.getActiveProject() };
-    const projectElement = document.getElementById('current-project');
 
-    project.title = projectName;
+    alertify.prompt(
+      `<h4>Editing ${project.title} project</h4>`,
+      '<p>Please provide the new name of the project</p>',
+      '',
+      (evt, value) => {
+        alertify.success(`OK: ${value}`);
 
-    const projectStatus = storage.checkProjectStatus(project);
-    const projectHeading = document.getElementById('project-heading');
+        const projectElement = document.getElementById('current-project');
 
-    if (projectStatus.invalid) {
-      alert(projectStatus.message);
-      /* eslint-enable no-alert */
+        project.title = value;
 
-      return;
-    }
+        const projectStatus = storage.checkProjectStatus(project);
+        const projectHeading = document.getElementById('project-heading');
 
-    storage.updateProject(project);
-    projectElement.textContent = projectName;
-    projectHeading.textContent = projectName;
+        if (projectStatus.invalid) {
+          alertify.alert(projectStatus.message, () => {
+            alertify.message('OK');
+          });
+
+          return;
+        }
+
+        storage.updateProject(project);
+        projectElement.textContent = value;
+        projectHeading.textContent = value;
+      },
+      () => {
+        alertify.error('Cancel');
+      },
+    );
   }
 }

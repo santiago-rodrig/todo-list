@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import moment from 'moment';
 /* eslint-enable import/no-unresolved */
+import alertify from 'alertifyjs/build/alertify';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
 import Task from './model';
@@ -258,9 +259,9 @@ export default class TasksController {
     const taskStatus = storage.checkTaskStatus(task, action);
 
     if (taskStatus.invalid) {
-      /* eslint-disable no-alert */
-      alert(taskStatus.message);
-      /* eslint-enable no-alert */
+      alertify.alert(taskStatus.message, () => {
+        alertify.message('OK');
+      });
 
       return true;
     }

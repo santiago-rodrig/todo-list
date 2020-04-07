@@ -161,10 +161,10 @@ export default class TodoStorage {
     localStorage.setItem(this.storageEntry, item);
   }
 
-  deleteTask(taskId) {
+  deleteTask(task) {
     const { tasks } = this.getActiveProject();
 
-    delete tasks[taskId];
+    delete tasks[task.id];
 
     this.updateStorage();
   }

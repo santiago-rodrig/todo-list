@@ -1,5 +1,4 @@
 import { DOMHelper, TodoStorage } from '../helpers';
-import Task from '../tasks/model';
 import Sidebar from '../sidebar';
 import TasksController from '../tasks/controller';
 
@@ -16,7 +15,7 @@ export default class Main {
 
   render() {
     const main = DOMHelper.createElement('main');
-    const tasks = (new TasksController()).tasks();
+    const tasks = (new TasksController()).renderTasksList();
     const sideBar = (new Sidebar()).render();
     const container = DOMHelper.createElement('div', ['container']);
     const row = DOMHelper.createElement('div', ['row']);

@@ -1,4 +1,4 @@
-import { TodoStorage } from '../helpers';
+import { TodoStorage, DOMHelper } from '../helpers';
 import Project from './model';
 
 export default class ProjectsController {
@@ -46,6 +46,28 @@ export default class ProjectsController {
     }
   }
 
+  renderProject(project) {
+    const item = DOMHelper.createElement('li', ['list-group-item']);
+    const projectsController = new ProjectsController();
+    const storage = new TodoStorage();
+
+    item.textContent = project.title;
+
+    if (project.active) {
+      item.id = 'current-project';
+      item.classList.add('active');
+    }
+
+    item.addEventListener(
+      'click',
+      projectsController.setActive.bind(projectsController, project, item),
+    );
+
+    item.addEventListener('click', this.setTasks);
+
+    return item;
+  }
+
   addProject() {
     const storage = new TodoStorage();
     const projectName = prompt('Please provide the name of the project');
@@ -61,7 +83,7 @@ export default class ProjectsController {
       id: storage.nextId,
     });
 
-    const projectElement = project.render();
+    const projectElement = this.renderProject(project);
     const projectStatus = storage.checkProjectStatus(project);
 
     if (projectStatus.invalid) {

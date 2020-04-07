@@ -1,8 +1,6 @@
-import moment from 'moment';
 import { DOMHelper, TodoStorage } from '../helpers';
 import TasksController from '../tasks/controller';
 import ProjectsController from '../projects/controller';
-import Project from '../projects/model';
 
 export default class Sidebar {
   projectsList() {
@@ -11,7 +9,7 @@ export default class Sidebar {
     const projects = Object.values(storage.projects);
 
     projects.forEach(p => {
-      list.append((new Project(p)).render());
+      list.append((new ProjectsController()).renderProject(p));
     });
 
     list.id = 'projects-list';
@@ -73,7 +71,7 @@ export default class Sidebar {
 
     pendingCheckInput.addEventListener(
       'click',
-      tasksController.showPending,
+      tasksController.showPending.bind(tasksController),
     );
 
     completedCheckLabel.textContent = 'Completed';
@@ -81,7 +79,7 @@ export default class Sidebar {
 
     completedCheckInput.addEventListener(
       'click',
-      tasksController.showCompleted,
+      tasksController.showCompleted.bind(tasksController),
     );
 
     form.append(pendingCheck, completedCheck);
@@ -155,7 +153,7 @@ export default class Sidebar {
 
     addProject.textContent = 'Add';
     editProject.textContent = 'Edit';
-    addTask.innerHTML = 'Add a task';
+    addTask.textContent = 'Add a task';
     removeProject.textContent = 'Remove';
     box.append(addProject, editProject, addTask, removeProject);
 

@@ -7,7 +7,7 @@ export default class Header {
       'jumbotron',
       'jumbotron-fluid',
       'bg-transparent',
-      'text-center'
+      'text-center',
     ]);
 
     const h1 = DOMHelper.createElement('h1');
@@ -23,7 +23,7 @@ export default class Header {
   render() {
     const container = DOMHelper.createElement(
       'header',
-      ['p-5', 'position-relative']
+      ['p-5', 'position-relative'],
     );
 
     const jumbotron = this.jumboTron();

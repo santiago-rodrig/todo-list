@@ -1,7 +1,7 @@
 import moment from 'moment';
-import Task from './model';
 import { DOMHelper, TodoStorage } from '../helpers';
 import Form from './form';
+import Task from './model';
 import Main from '../main';
 
 export default class TasksController {
@@ -24,12 +24,11 @@ export default class TasksController {
   showPending() {
     const tasksContainer = document.getElementById('tasks-list-container');
     const tasksContainerParent = tasksContainer.parentNode;
-    const tasksController = new TasksController();
     const addTaskButton = document.getElementById('add-task-btn');
     const storage = new TodoStorage();
 
     tasksContainerParent.removeChild(tasksContainer);
-    tasksContainerParent.append(tasksController.tasks());
+    tasksContainerParent.append(this.renderTasksList());
     storage.swapTasksMode('pending');
     addTaskButton.disabled = false;
     addTaskButton.classList.remove('unclickable');
@@ -38,18 +37,186 @@ export default class TasksController {
   showCompleted() {
     const tasksContainer = document.getElementById('tasks-list-container');
     const tasksContainerParent = tasksContainer.parentNode;
-    const tasksController = new TasksController();
     const addTaskButton = document.getElementById('add-task-btn');
     const storage = new TodoStorage();
 
     tasksContainerParent.removeChild(tasksContainer);
-    tasksContainerParent.append(tasksController.tasks('completed'));
+    tasksContainerParent.append(this.renderTasksList('completed'));
     storage.swapTasksMode('completed');
     addTaskButton.disabled = true;
     addTaskButton.classList.add('unclickable');
   }
 
-  tasks(type = 'pending') {
+  taskHeader(task) {
+    const header = DOMHelper.createElement(
+      'div', ['card-header', 'bg-dark'],
+    );
+
+    const flexContainer = DOMHelper.createElement(
+      'div', ['d-flex', 'justify-content-between', 'bg-dark'],
+    );
+
+    const deleteAction = DOMHelper.createElement(
+      'div', ['text-danger', 'task-action'],
+    );
+
+    const priority = DOMHelper.createElement('div', ['text-light']);
+
+    priority.textContent = task.priority;
+
+    deleteAction.innerHTML = '<i class="fas fa-window-close"></i>';
+    deleteAction.addEventListener('click', this.deleteTask.bind(task));
+    flexContainer.append(priority, deleteAction);
+    header.append(flexContainer);
+
+    return header;
+  }
+
+  taskBody(task) {
+    const body = DOMHelper.createElement('div', ['card-body']);
+    const title = DOMHelper.createElement('h3', ['card-title']);
+    const text = DOMHelper.createElement('p', ['card-text']);
+
+    title.textContent = task.title;
+    text.textContent = task.description;
+    body.append(title, text);
+
+    return body;
+  }
+
+  renderTask(task) {
+    const box = DOMHelper.createElement(
+      'div', ['col-12', 'col-lg-6', 'my-4'],
+    );
+
+    const taskElement = DOMHelper.createElement('div', ['card']);
+
+    switch (task.priority) {
+      case 'important':
+        taskElement.classList.add('bg-danger');
+        break;
+      case 'optional':
+        taskElement.classList.add('bg-secondary');
+        break;
+      default:
+        taskElement.classList.add('bg-light');
+        break;
+    }
+
+    const taskHeader = this.taskHeader(task);
+    const taskBody = this.taskBody(task);
+    const taskFooter = this.taskFooter(task);
+
+    taskElement.append(taskHeader, taskBody, taskFooter);
+    taskElement.id = `task-${task.id}`;
+    box.append(taskElement);
+
+    return box;
+  }
+
+  taskFooter(task) {
+    const footer = DOMHelper.createElement(
+      'div', ['card-footer', 'bg-dark'],
+    );
+
+    const flexContainer = DOMHelper.createElement(
+      'div',
+      ['d-flex', 'justify-content-between', 'bg-dark', 'p-2'],
+    );
+
+    const completeAction = DOMHelper.createElement(
+      'div', ['text-success', 'task-action'],
+    );
+
+    const editAction = DOMHelper.createElement(
+      'div',
+      ['text-light', 'task-action', 'mr-2'],
+      [
+        { prop: 'data-toggle', value: 'modal' },
+        { prop: 'data-target', value: '#tasks-modal' },
+      ],
+    );
+
+    const actions = DOMHelper.createElement('div', ['d-flex', 'align-self-end']);
+    const dueDate = DOMHelper.createElement('p', ['text-light']);
+    const completeDate = DOMHelper.createElement('p', ['text-light']);
+    const completeHeading = DOMHelper.createElement('h4', ['text-info']);
+    const dueDateHeading = DOMHelper.createElement('h4', ['text-info']);
+    const completeContainer = DOMHelper.createElement('div');
+    const dueDateContainer = DOMHelper.createElement('div');
+
+    dueDate.textContent = task.dueDate;
+    completeDate.textContent = task.completeDate;
+    completeHeading.textContent = 'Completion date';
+    dueDateHeading.textContent = 'Due date';
+    completeAction.innerHTML = '<i class="fas fa-check-square"></i>';
+    editAction.innerHTML = '<i class="fas fa-edit"></i>';
+    dueDateContainer.append(dueDateHeading, dueDate);
+    completeContainer.append(completeHeading, completeDate);
+
+    editAction.addEventListener(
+      'click',
+      this.setModal.bind(this, 'edit', task),
+    );
+
+    completeAction.addEventListener('click', this.completeTask.bind(task));
+    actions.append(editAction, completeAction);
+
+    if (!task.completed) {
+      flexContainer.append(dueDateContainer, actions);
+    } else {
+      flexContainer.classList.add('flex-column');
+      flexContainer.append(dueDateContainer, completeContainer);
+    }
+
+    footer.append(flexContainer);
+
+    return footer;
+  }
+
+  deleteTask() {
+    const taskColumn = document.getElementById(`task-${this.id}`).parentNode;
+
+    const fadeEffect = setInterval(() => {
+      if (!taskColumn.style.opacity) {
+        taskColumn.style.opacity = 1;
+      }
+
+      if (taskColumn.style.opacity > 0) {
+        taskColumn.style.opacity -= 0.05;
+      } else {
+        clearInterval(fadeEffect);
+        taskColumn.parentNode.removeChild(taskColumn);
+      }
+    }, 8);
+
+    const storage = new TodoStorage();
+
+    storage.deleteTask(this);
+  }
+
+  completeTask() {
+    const taskColumn = document.getElementById(`task-${this.id}`).parentNode;
+
+    const fadeEffect = setInterval(() => {
+      if (!taskColumn.style.opacity) {
+        taskColumn.style.opacity = 1;
+      }
+
+      if (taskColumn.style.opacity > 0) {
+        taskColumn.style.opacity -= 0.05;
+      } else {
+        clearInterval(fadeEffect);
+        taskColumn.parentNode.removeChild(taskColumn);
+      }
+    }, 8);
+
+    const storage = new TodoStorage();
+
+    storage.completeTask(this);
+  }
+
+  renderTasksList(type = 'pending') {
     const storage = new TodoStorage();
     const { tasks } = storage.getActiveProject();
 
@@ -69,13 +236,13 @@ export default class TasksController {
     if (type === 'pending') {
       Object.values(tasks).forEach(task => {
         if (!task.completed) {
-          taskList.append((new Task(task)).render());
+          taskList.append(this.renderTask(new Task(task)));
         }
       });
     } else {
       Object.values(tasks).forEach(task => {
         if (task.completed) {
-          taskList.append((new Task(task)).render());
+          taskList.append(this.renderTask(new Task(task)));
         }
       });
     }
@@ -236,7 +403,7 @@ export default class TasksController {
 
     if (this.taskIsInvalid(storage, task, 'add')) return;
 
-    const taskElement = (new Task(task)).render();
+    const taskElement = this.renderTask(new Task(task));
     const taskList = document.getElementById('tasks-list');
 
     taskList.append(taskElement);

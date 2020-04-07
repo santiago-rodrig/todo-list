@@ -8,7 +8,7 @@ export default class InfoIcon {
       [
         { prop: 'data-toggle', value: 'modal' },
         { prop: 'data-target', value: '#info-modal' },
-        { prop: 'id', value: 'info-icon' }
+        { prop: 'id', value: 'info-icon' },
       ],
     );
 

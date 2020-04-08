@@ -59,6 +59,13 @@ npm install
 npm run server
 ```
 
+## License
+
+This project is licensed under the
+[MIT](./LICENSE) license, which
+basically means that you can do whatever you want with the code under the
+condition of giving credit to its author and noticing the license.
+
 ## Credits
 
 This project was developed by [srodrig](https://github.com/santiago-rodrig) and

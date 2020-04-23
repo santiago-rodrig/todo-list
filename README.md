@@ -70,3 +70,12 @@ condition of giving credit to its author and noticing the license.
 
 This project was developed by [srodrig](https://github.com/santiago-rodrig) and
 [mrnadaara](https://github.com/mrnadaara).
+
+## Contact
+
+You can reach me out at the following URLs
+
+- [Github](https://github.com/santiago-rodrig)
+- [LinkedIn](https://www.linkedin.com/in/santiago-andres-rodriguez-marquez)
+- [AngelList](https://angel.co/u/santiago-andres-rodriguez-marquez)
+- [santo1996.29@gmail.com](mailto:santo1996.29@gmail.com)
